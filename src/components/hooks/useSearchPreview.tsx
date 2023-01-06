@@ -12,7 +12,6 @@ export default function useSearchPreview(): [
     (query: string, part: string, maxResults: number, callback?: Function) => {
       getVideoList(query, part, maxResults).then((response) => {
         setData(response.data.items);
-        console.log(response);
         if (callback) callback();
       });
     },
@@ -21,7 +20,7 @@ export default function useSearchPreview(): [
 
   const resetData = useCallback(() => {
     setData([]);
-  }, []);
+  }, [setData]);
 
   return [data, requestData, resetData];
 }

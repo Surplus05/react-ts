@@ -11,7 +11,7 @@ function App() {
         <Header />
         <Routes>
           <Route path={"/"} element={<>메인페이지. 추천비디오 표시</>}></Route>
-          <Route path={"/result"} element={<>검색. 추천비디오 표시</>}></Route>
+          <Route path={"/result"} element={<>검색. 검색결과 표시</>}></Route>
         </Routes>
       </BrowserRouter>
     </>

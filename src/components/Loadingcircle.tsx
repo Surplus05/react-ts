@@ -12,7 +12,6 @@ const circleRotate = keyframes`
    to {
       transform: rotate(1turn);
    }`;
-
 const StyledLoadingCircle = styled.div`
   background-color: transparent;
   border-radius: 50%;
@@ -22,7 +21,6 @@ const StyledLoadingCircle = styled.div`
   height: 2.25em;
   animation: ${circleRotate} 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 `;
-
 const Loadingcircle = () => {
   return (
     <StyledLoadingCircleWrapper>

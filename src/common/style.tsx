@@ -8,7 +8,7 @@ const GlobalStyle = createGlobalStyle`
   --color--black: #0E0E10;
   --color--white: #fff;
 
-  --border--radius: 6px;
+  --border--radius: 0.375em;
 
   --primary--black--color: #191f28;
   --primary--color: #ee7272;
@@ -28,7 +28,8 @@ body {
 body::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera*/
 }
-.sr-focusOut {
+
+.sr-focusOut, .hidden {
   visibility: hidden;
 }
 .si-focusIn {
@@ -67,19 +68,21 @@ export const StyledIconWrapper = styled.div<IconWrapperProps>`
     return "var(--border--radius)";
   }};
 
-  width: ${({ sideLength }) => {
+  ${({ sideLength }) => {
     if (sideLength) {
-      return sideLength;
+      return `
+      min-width: ${sideLength};
+      width: ${sideLength};
+      height: ${sideLength};
+    `;
     }
-    return "2.25em";
+    return `
+      min-width: 2.25em;
+      width: 2.25em;
+      height: 2.25em;
+    `;
   }};
 
-  height: ${({ sideLength }) => {
-    if (sideLength) {
-      return sideLength;
-    }
-    return "2.25em";
-  }};
   background-color: var(--color--icon);
   transition: ${({ transition }) => {
     if (transition) {
@@ -97,4 +100,25 @@ export const SearchBarPosition = `
   position: absolute;
   top: 0;
   left: 0;
+`;
+
+export const StyledSearchResultItemWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.375em 0.375em 0.375em;
+  box-sizing: border-box;
+  align-items: center;
+`;
+
+export const StyledSearchResultItem = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+  margin: 0;
+  cursor: pointer;
+  border-radius: var(--border--radius);
+  &:hover {
+    background-color: var(--color--icon--hover);
+  }
 `;

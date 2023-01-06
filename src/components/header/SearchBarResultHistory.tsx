@@ -1,34 +1,17 @@
 import React from "react";
-import styled from "styled-components";
-import { StyledIconWrapper } from "../../common/style";
-
-const StyledSearchResultHistoryWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 0 0.375em 0.375em 0.375em;
-  box-sizing: border-box;
-  align-items: center;
-`;
-
-const StyledSearchResultHistory = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  text-align: left;
-  margin: 0;
-  cursor: pointer;
-  border-radius: var(--border--radius);
-  &:hover {
-    background-color: var(--primary--icon--color);
-  }
-`;
+import { decode } from "html-entities";
+import {
+  StyledIconWrapper,
+  StyledSearchResultItem,
+  StyledSearchResultItemWrapper,
+} from "../../common/style";
 
 const SearchBarResultHistory = ({
-  onClick,
+  onClickHistory,
   onClickRemove,
   history,
 }: {
-  onClick: Function;
+  onClickHistory: Function;
   onClickRemove: Function;
   history: Array<String>;
 }) => {
@@ -36,29 +19,34 @@ const SearchBarResultHistory = ({
   return (
     <>
       {history.slice(0, 3).map((item: any) => {
+        const query = decode(item);
+
         return (
-          <StyledSearchResultHistoryWrapper key={item}>
-            <StyledSearchResultHistory
+          <StyledSearchResultItemWrapper key={query}>
+            <StyledSearchResultItem
+              style={{
+                marginRight: "0.375em",
+              }}
               onClick={() => {
-                onClick(item);
+                onClickHistory(query);
               }}
             >
               <i className="fa-solid fa-clock-rotate-left" />
               <span
                 style={{
-                  width: "19.875em",
+                  maxWidth: "19.5em",
                   marginLeft: "0.375em",
                   lineHeight: "1.875em",
                 }}
               >
-                {item}
+                {query}
               </span>
-            </StyledSearchResultHistory>
+            </StyledSearchResultItem>
             <StyledIconWrapper
               sideLength="1.75em"
               transition="0"
               onClick={() => {
-                onClickRemove(item);
+                onClickRemove(query);
               }}
             >
               <i
@@ -68,7 +56,7 @@ const SearchBarResultHistory = ({
                 className="fa-solid fa-xmark"
               ></i>
             </StyledIconWrapper>
-          </StyledSearchResultHistoryWrapper>
+          </StyledSearchResultItemWrapper>
         );
       })}
     </>

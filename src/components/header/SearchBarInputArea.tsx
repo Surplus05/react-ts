@@ -8,6 +8,7 @@ const StyledSearchInputWrapper = styled.div`
   margin: 0.375em;
   z-index: 2;
   border-radius: var(--border-radius);
+  width: calc(100% - 0.75em);
   height: 2.25em;
   display: flex;
   flex-direction: row;
@@ -19,9 +20,8 @@ const StyledSearchBar = styled.div`
   overflow: hidden;
   border-radius: var(--border--radius) 0 0 var(--border--radius);
   background-color: var(--primary--search--background);
-  width: 21em;
+  width: inherit;
   margin: 0 1px 0 0;
-  transition: 0.3s;
 `;
 
 const SearchBarInputArea = ({
@@ -58,7 +58,11 @@ const SearchBarInputArea = ({
           type="text"
         />
       </StyledSearchBar>
-      <StyledIconWrapper borderRadius={"0 6px 6px 0"} onClick={searchRequest}>
+      <StyledIconWrapper
+        borderRadius={"0 0.375em 0.375em 0"}
+        onClick={searchRequest}
+        transition={"0"}
+      >
         <i className="fa-solid fa-magnifying-glass"></i>
       </StyledIconWrapper>
     </StyledSearchInputWrapper>
