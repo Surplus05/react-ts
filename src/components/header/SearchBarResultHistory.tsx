@@ -25,6 +25,7 @@ const SearchBarResultHistory = ({
           <StyledSearchResultItemWrapper key={query}>
             <StyledSearchResultItem
               style={{
+                width: "100%",
                 marginRight: "0.375em",
               }}
               onClick={() => {
