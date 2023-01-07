@@ -59,7 +59,7 @@ const SearchBar = ({
   const [addHistory, removeHistory] = useSearchHistory();
   const [data, requestData, resetData] = useSearchPreview();
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   // dom refs
   // const wrapperRef = useRef<HTMLInputElement>(null);
@@ -153,7 +153,7 @@ const SearchBar = ({
 
   const detectTab = (e: React.KeyboardEvent): void => {
     if (e.key === "Tab" && platform === "DESKTOP" && resultRef.current) {
-      resultRef.current.classList.remove("sr-focusOut");
+      resultRef.current.classList.add("sr-focusOut");
     }
   };
 

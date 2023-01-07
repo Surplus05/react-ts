@@ -49,6 +49,7 @@ const SearchBarInputArea = ({
             padding: "0 6px",
             margin: "0",
           }}
+          tabIndex={1}
           onFocus={getFocus}
           onBlur={lostFocus}
           onChange={onTextChange}
@@ -59,6 +60,7 @@ const SearchBarInputArea = ({
         />
       </StyledSearchBar>
       <StyledIconWrapper
+        tabIndex={2}
         borderRadius={"0 0.375em 0.375em 0"}
         onClick={searchRequest}
         transition={"0"}

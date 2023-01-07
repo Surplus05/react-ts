@@ -115,6 +115,7 @@ export const StyledSearchResultItem = styled.div`
   flex-direction: row;
   align-items: center;
   text-align: left;
+  width: 100%;
   margin: 0;
   cursor: pointer;
   border-radius: var(--border--radius);

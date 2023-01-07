@@ -29,7 +29,7 @@ const StyledLogo = styled.a`
 `;
 
 const Header = () => {
-  const [platform, setPlatform] = useState<string>("DESKTOP");
+  const [platform, setPlatform] = useState<string>("null");
   const wrapperRef = useRef<HTMLInputElement>(null);
 
   const toggleSearchBar = () => {
@@ -46,7 +46,7 @@ const Header = () => {
     function eventHandler(event: any) {
       if (event.target.innerWidth < 500 && platform === "DESKTOP") {
         setPlatform("MOBILE");
-      } else {
+      } else if (event.target.innerWidth > 500 && platform === "MOBILE") {
         setPlatform("DESKTOP");
       }
     }
@@ -54,17 +54,22 @@ const Header = () => {
     return () => {
       window.removeEventListener("resize", eventHandler);
     };
-  }, []);
-
+  }, [platform]);
   return (
     <StyledHeaderWrapper>
       <StyledHeader>
         <StyledLogo href="/">Logo</StyledLogo>
         <SearchBar platform={platform} wrapperRef={wrapperRef} />
-        <StyledIconWrapper className="toggleBtn" onClick={toggleSearchBar}>
-          <i className="fa-solid fa-magnifying-glass toggleBtn" />
-        </StyledIconWrapper>
-        <StyledIconWrapper>
+        {platform === "MOBILE" && (
+          <StyledIconWrapper
+            className="toggleBtn"
+            onClick={toggleSearchBar}
+            tabIndex={2}
+          >
+            <i className="fa-solid fa-magnifying-glass toggleBtn" />
+          </StyledIconWrapper>
+        )}
+        <StyledIconWrapper tabIndex={3}>
           <i className="fa-solid fa-user" />
         </StyledIconWrapper>
       </StyledHeader>
