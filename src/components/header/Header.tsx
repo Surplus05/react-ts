@@ -11,6 +11,7 @@ const StyledHeaderWrapper = styled.div`
   height: 3.25em;
   display: flex;
   justify-content: center;
+  border-bottom: 2px solid #000;
 `;
 
 const StyledHeader = styled.div`

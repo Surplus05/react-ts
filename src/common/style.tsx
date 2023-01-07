@@ -3,6 +3,7 @@ import styled, { createGlobalStyle } from "styled-components";
 const GlobalStyle = createGlobalStyle`
 :root {
   --color--header: #18181B;
+  --color--body:#0e0e10;
   --color--icon: #35363a;
   --color--icon--hover: #40413f;
   --color--black: #0E0E10;

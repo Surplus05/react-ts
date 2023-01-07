@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import GlobalStyle from "./common/style";
+import Body from "./components/body/Body";
 import Header from "./components/header/Header";
 
 function App() {
@@ -10,8 +11,10 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route path={"/"} element={<>메인페이지. 추천비디오 표시</>}></Route>
-          <Route path={"/result"} element={<>검색. 검색결과 표시</>}></Route>
+          <Route path="/" element={<Body />}>
+            <Route path="/" element={<>메인페이지. 추천비디오 표시</>}></Route>
+            <Route path="/result" element={<>검색. 검색결과 표시</>}></Route>
+          </Route>
         </Routes>
       </BrowserRouter>
     </>

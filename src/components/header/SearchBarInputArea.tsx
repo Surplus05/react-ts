@@ -38,6 +38,7 @@ const SearchBarInputArea = ({
         <input
           placeholder="검색"
           style={{
+            userSelect: "none",
             boxSizing: "border-box",
             color: "#fff",
             background: "transparent",
