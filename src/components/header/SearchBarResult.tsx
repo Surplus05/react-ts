@@ -8,7 +8,7 @@ import SearchBarResultPreview from "./SearchBarResultPreview";
 const StyledSearchBarResult = styled.div`
   max-width: 24em;
   border-radius: var(--border--radius);
-  padding: 3em 1px 0 0;
+  padding: 3em 0 0 0;
   background-color: var(--color--header);
   box-shadow: 0px 0px 0.25em 0.05em #000;
   z-index: 1;

@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useContext, useRef } from "react";
 import styled from "styled-components";
 import { StyledIconWrapper } from "../../common/style";
+import { PlatformContext } from "../context/PlatformContext";
 import SearchBar from "./SearchBar";
 
 const StyledHeaderWrapper = styled.div`
@@ -27,41 +28,23 @@ const StyledHeader = styled.div`
 const StyledLogo = styled.a`
   color: var(--color--white);
   text-decoration: none;
+  font-weight: bold;
 `;
 
 const Header = () => {
-  const [platform, setPlatform] = useState<string>("null");
   const wrapperRef = useRef<HTMLInputElement>(null);
+  const context = useContext(PlatformContext);
 
   const toggleSearchBar = () => {
     if (wrapperRef.current) wrapperRef.current.classList.toggle("hidden");
   };
-  useEffect(() => {
-    if (window.innerWidth < 500) setPlatform("MOBILE");
-    else {
-      setPlatform("DESKTOP");
-    }
-  }, []);
 
-  useEffect(() => {
-    function eventHandler(event: any) {
-      if (event.target.innerWidth < 500 && platform === "DESKTOP") {
-        setPlatform("MOBILE");
-      } else if (event.target.innerWidth > 500 && platform === "MOBILE") {
-        setPlatform("DESKTOP");
-      }
-    }
-    window.addEventListener("resize", eventHandler);
-    return () => {
-      window.removeEventListener("resize", eventHandler);
-    };
-  }, [platform]);
   return (
     <StyledHeaderWrapper>
       <StyledHeader>
         <StyledLogo href="/">Logo</StyledLogo>
-        <SearchBar platform={platform} wrapperRef={wrapperRef} />
-        {platform === "MOBILE" && (
+        <SearchBar wrapperRef={wrapperRef} />
+        {context.platform === "MOBILE" && (
           <StyledIconWrapper
             className="toggleBtn"
             onClick={toggleSearchBar}

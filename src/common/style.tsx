@@ -124,3 +124,10 @@ export const StyledSearchResultItem = styled.div`
     background-color: var(--color--icon--hover);
   }
 `;
+
+export const StyledBodyWrapper = styled.div`
+  box-sizing: border-box;
+  display: flex;
+  width: 100vw;
+  height: calc(100vh - 3.375em);
+`;

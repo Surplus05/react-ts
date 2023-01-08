@@ -3,7 +3,7 @@ import { Outlet } from "react-router";
 import styled from "styled-components";
 
 const StyledBodyWrapper = styled.div`
-  height: calc(100vh - 3.25em);
+  height: calc(100vh - 3.375em);
   background: var(--color--body);
   color: var(--color--white);
 `;

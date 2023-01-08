@@ -1,6 +1,13 @@
-import React, { BaseSyntheticEvent, useEffect, useRef, useState } from "react";
+import React, {
+  BaseSyntheticEvent,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
+import { PlatformContext } from "../context/PlatformContext";
 import useOutsideDetector from "../hooks/useOutsideDetector";
 import useSearchHistory from "../hooks/useSearchHistory";
 import useSearchPreview from "../hooks/useSearchPreview";
@@ -45,12 +52,13 @@ const StyledSearchBarWrapper = styled.div<SearchBarWrapperProps>`
 `;
 
 const SearchBar = ({
-  platform,
   wrapperRef,
 }: {
-  platform: string;
   wrapperRef: React.RefObject<HTMLInputElement>;
 }) => {
+  // contexts
+  const context = useContext(PlatformContext);
+
   // states
   const [history, setHistory] = useState<Array<string>>(
     JSON.parse(localStorage.getItem("history") as string)
@@ -87,32 +95,33 @@ const SearchBar = ({
 
   useEffect(() => {
     if (resultRef.current && wrapperRef.current) {
-      if (platform === "DESKTOP") {
+      if (context.platform === "DESKTOP") {
         wrapperRef.current.classList.remove("hidden");
         resultRef.current.classList.add("sr-focusOut");
       }
-      if (platform === "MOBILE") {
+      if (context.platform === "MOBILE") {
         resultRef.current.classList.remove("sr-focusOut");
       }
     }
-  }, [resultRef, wrapperRef, platform]);
+  }, [resultRef, wrapperRef, context.platform]);
 
   const hideSearchBarResult = () => {
-    if (resultRef.current && platform === "DESKTOP") {
+    if (resultRef.current && context.platform === "DESKTOP") {
       resultRef.current.classList.add("sr-focusOut");
     }
   };
 
   const pageMove = (q: string) => {
     if (inputRef.current && wrapperRef.current) {
-      if (resultRef.current && platform === "DESKTOP")
+      if (resultRef.current && context.platform === "DESKTOP")
         resultRef.current.classList.add("sr-focusOut");
-      if (platform === "MOBILE") wrapperRef.current.classList.add("hidden");
-
+      if (context.platform === "MOBILE")
+        wrapperRef.current.classList.add("hidden");
       inputRef.current.value = q;
       addHistory(q);
       setHistory(JSON.parse(localStorage.getItem("history") as string));
       inputRef.current.blur();
+      resetData();
       navigate(`/result?q=${q}`);
     }
   };
@@ -121,7 +130,7 @@ const SearchBar = ({
     isTypingNow.current = false;
     if (inputRef.current) {
       if (inputRef.current.value) {
-        requestData(inputRef.current.value, "snippet", 3, () => {});
+        requestData(inputRef.current.value, 3, () => {});
       } else {
         resetData();
       }
@@ -152,7 +161,11 @@ const SearchBar = ({
   };
 
   const detectTab = (e: React.KeyboardEvent): void => {
-    if (e.key === "Tab" && platform === "DESKTOP" && resultRef.current) {
+    if (
+      e.key === "Tab" &&
+      context.platform === "DESKTOP" &&
+      resultRef.current
+    ) {
       resultRef.current.classList.add("sr-focusOut");
     }
   };
@@ -213,14 +226,14 @@ const SearchBar = ({
     setHistory(JSON.parse(localStorage.getItem("history") as string));
   };
 
-  useOutsideDetector(wrapperRef, resultRef, platform);
+  useOutsideDetector(wrapperRef, resultRef, context.platform);
 
   return (
     <StyledSearchBarWrapper
       className="hidden"
       ref={wrapperRef}
-      data-platform={platform}
-      platform={platform}
+      data-platform={context.platform}
+      platform={context.platform}
     >
       <SearchBarResult
         history={history}
