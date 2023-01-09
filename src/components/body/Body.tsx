@@ -6,6 +6,8 @@ const StyledBodyWrapper = styled.div`
   height: calc(100vh - 3.375em);
   background: var(--color--body);
   color: var(--color--white);
+  display: flex;
+  justify-content: center;
 `;
 
 const Body = () => {

@@ -49,6 +49,7 @@ const StyledSearchBarWrapper = styled.div<SearchBarWrapperProps>`
     return "0";
   }};
   margin: 2px 0;
+  z-index: 1;
 `;
 
 const SearchBar = ({

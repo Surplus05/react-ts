@@ -22,6 +22,7 @@ const StyledHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100vw;
+  max-width: 90em;
   margin: 0 0.5em 0 0.5em;
 `;
 

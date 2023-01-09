@@ -8,6 +8,7 @@ const GlobalStyle = createGlobalStyle`
   --color--icon--hover: #40413f;
   --color--black: #0E0E10;
   --color--white: #fff;
+  --color--title: #0000009f;
 
   --border--radius: 0.375em;
 
@@ -128,6 +129,7 @@ export const StyledSearchResultItem = styled.div`
 export const StyledBodyWrapper = styled.div`
   box-sizing: border-box;
   display: flex;
+  justify-content: center;
   width: 100vw;
   height: calc(100vh - 3.375em);
 `;
