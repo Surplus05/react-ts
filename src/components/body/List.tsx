@@ -91,15 +91,15 @@ const List = ({
       let listWidth = (width + 8) * MAXIMUM_ITEM_PER_LIST;
       maxWidth.current = -listWidth + innerWidth;
       if (context.innerWidth <= 1440) maxWidth.current -= 8;
-    }
-    translatePrev.current = Number(
-      wrapperRef.current!.style.transform.replaceAll(/[^0-9,^-]/g, "")
-    );
-    if (
-      maxWidth.current > translatePrev.current &&
-      translatePrev.current !== 0
-    ) {
-      setTranslate(maxWidth.current);
+      translatePrev.current = Number(
+        wrapperRef.current.style.transform.replaceAll(/[^0-9,^-]/g, "")
+      );
+      if (
+        maxWidth.current > translatePrev.current &&
+        translatePrev.current !== 0
+      ) {
+        setTranslate(maxWidth.current);
+      }
     }
   }, [data, context.innerWidth, width]);
 
