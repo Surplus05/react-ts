@@ -38,6 +38,7 @@ const StyledListItemWrapper = styled.div`
 const ListItem = ({
   onMouseEnterItem,
   onMouseLeaveItem,
+  onClickItem,
   fontSize,
   item,
   width,
@@ -46,12 +47,14 @@ const ListItem = ({
 }: {
   onMouseEnterItem: (
     e: React.BaseSyntheticEvent,
-    progressRef: React.RefObject<HTMLDivElement>
+    progressRef: React.RefObject<HTMLDivElement>,
+    item: any
   ) => void;
   onMouseLeaveItem: (
     e: React.BaseSyntheticEvent,
     progressRef: React.RefObject<HTMLDivElement>
   ) => void;
+  onClickItem: (item: any) => void;
   fontSize: number;
   item: any;
   width: number;
@@ -64,18 +67,25 @@ const ListItem = ({
       : item.snippet.thumbnails.medium.url;
   const progressRef: React.RefObject<HTMLDivElement> =
     useRef<HTMLDivElement>(null);
+
   useEffect(() => {}, []);
 
   return (
     <StyledListItemContainer>
       <div
         onMouseEnter={(e) => {
-          onMouseEnterItem(e, progressRef);
+          onMouseEnterItem(e, progressRef, item);
         }}
         onMouseLeave={(e) => {
           onMouseLeaveItem(e, progressRef);
         }}
-        data-list-item-listner="true"
+        onTouchEnd={() => {
+          onClickItem(item);
+        }}
+        onClick={() => {
+          onClickItem(item);
+        }}
+        className="li-eventTarget"
         style={{
           zIndex: 1,
           position: "absolute",

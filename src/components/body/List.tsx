@@ -14,10 +14,11 @@ const StyledListWrapper = styled.div`
   max-width: 90em;
   overflow: hidden;
   margin: 0.5em;
+  position: relative;
 `;
 
 const StyledListItemWrapper = styled.div`
-  overflow: hidden;
+  /* overflow: hidden; */
   width: fit-content;
   display: flex;
   flex-direction: row;
@@ -40,12 +41,11 @@ const List = ({
   const [data, requestData] = useMainList();
   const context = useContext(PlatformContext);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
   const translatePrev = useRef<number>(0);
   const maxWidth = useRef<number>(0);
 
   const hoverTimerId: React.MutableRefObject<NodeJS.Timeout | null> =
-    useRef<NodeJS.Timeout | null>(null);
-  const preventDuplicatedEventTimerId: React.MutableRefObject<NodeJS.Timeout | null> =
     useRef<NodeJS.Timeout | null>(null);
   const isDraggingRef = useRef<boolean>(false);
 
@@ -107,17 +107,13 @@ const List = ({
     if (wrapperRef.current) {
       wrapperRef.current.addEventListener("mousedown", onDragStart);
       wrapperRef.current.addEventListener("touchstart", onDragStart);
-      wrapperRef.current.addEventListener("mouseup", clickItem);
-      wrapperRef.current.addEventListener("touchend", clickItem);
     }
 
     return () => {
       if (wrapperRef.current) {
         wrapperRef.current.removeEventListener("mousedown", onDragStart);
-        wrapperRef.current.removeEventListener("touchstart", onDragStart);
-        wrapperRef.current.removeEventListener("touchend", clickItem);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        wrapperRef.current.removeEventListener("mouseup", clickItem);
+        wrapperRef.current.removeEventListener("touchstart", onDragStart);
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -148,21 +144,6 @@ const List = ({
       wrapperRef.current.addEventListener("mousemove", onDragMove);
       wrapperRef.current.addEventListener("touchmove", onDragMove);
       wrapperRef.current.addEventListener("mouseleave", onDragEnd);
-
-      if (preventDuplicatedEventTimerId.current)
-        clearInterval(preventDuplicatedEventTimerId.current);
-      preventDuplicatedEventTimerId.current = setTimeout(
-        preventDuplicatedEvent,
-        200
-      );
-    }
-  }
-
-  function preventDuplicatedEvent() {
-    if (wrapperRef.current) {
-      // current mouse event is no longer click.
-      wrapperRef.current.removeEventListener("mouseup", clickItem); // will be re-added at onDragEnd.
-      wrapperRef.current.removeEventListener("touchend", clickItem); // will be re-added at onDragEnd.
       wrapperRef.current.addEventListener("touchend", onDragEnd);
       wrapperRef.current.addEventListener("mouseup", onDragEnd);
     }
@@ -171,7 +152,6 @@ const List = ({
   function onDragMove(e: MouseEvent | TouchEvent) {
     if (!isDraggingRef.current) {
       isDraggingRef.current = true;
-      preventDuplicatedEvent();
     }
     switch (e.type) {
       case "mousemove": {
@@ -204,7 +184,7 @@ const List = ({
         wrapperRef.current.style.transition = "0.3s ease-out";
         wrapperRef.current.removeEventListener("mousedown", onDragStart);
         wrapperRef.current.removeEventListener("touchstart", onDragStart);
-        wrapperRef.current.addEventListener("mouseup", clickItem);
+        // wrapperRef.current.addEventListener("mouseup", clickItem);
       }
       setTranslate(translatePrev.current);
       setTimeout(() => {
@@ -212,7 +192,7 @@ const List = ({
           wrapperRef.current.style.transition = "";
           wrapperRef.current.addEventListener("mousedown", onDragStart);
           wrapperRef.current.addEventListener("touchstart", onDragStart);
-          wrapperRef.current.addEventListener("mouseup", clickItem);
+          // wrapperRef.current.addEventListener("mouseup", clickItem);
         }
       }, 300);
     }
@@ -228,23 +208,30 @@ const List = ({
       } else if (maxWidth.current > translatePrev.current) {
         exceedLimits("right");
       }
-      wrapperRef.current.removeEventListener("mouseleave", onDragEnd);
       wrapperRef.current.removeEventListener("mousemove", onDragMove);
+      wrapperRef.current.removeEventListener("touchmove", onDragMove);
+      wrapperRef.current.removeEventListener("mouseleave", onDragEnd);
       wrapperRef.current.removeEventListener("mouseup", onDragEnd);
-      wrapperRef.current.addEventListener("mouseup", clickItem);
-      wrapperRef.current.addEventListener("touchend", clickItem);
-      if (e.target && e.type === "mouseup") resumeHover(e.target);
-      isDraggingRef.current = false;
+      setTimeout(() => {
+        isDraggingRef.current = false;
+      }, 0);
+      // mouseup 이벤트가 click 이벤트보다 더 빨리 발동.
+      // onClickItem 에서는 isDragging의 boolean 값으로 클릭을 판별하나
+      // isDragging값은 이미 false 로 변경되었음 -> 감지불가.
+      // setTimeout 0 를 주어 boolean 값 변경이 click 이벤트 뒤에 나오도록 함.
     }
   }
 
   function onMouseEnterItem(
     e: React.BaseSyntheticEvent,
-    progressRef: React.RefObject<HTMLDivElement>
+    progressRef: React.RefObject<HTMLDivElement>,
+    item: any
   ) {
     if (!isDraggingRef.current) {
       if (hoverTimerId.current) clearInterval(hoverTimerId.current);
-      hoverTimerId.current = setTimeout(hoverItem, 1500);
+      hoverTimerId.current = setTimeout(() => {
+        popupItem(item);
+      }, 1500);
       if (progressRef.current) {
         progressRef.current.style.width = `${width}px`;
         progressRef.current.style.transition = "1s linear";
@@ -265,37 +252,29 @@ const List = ({
   function preventHover(e: any) {
     let progressBar: HTMLDivElement;
     if (hoverTimerId.current) clearInterval(hoverTimerId.current);
-    if (e.getAttribute("data-list-item-listner")) {
+    if (e.className === "li-eventTarget") {
       progressBar = e.parentNode.children[1];
       progressBar.style.transition = "0s";
       progressBar.style.width = `0px`;
     }
   }
 
-  function resumeHover(e: any) {
-    let progressBar: HTMLDivElement;
-    if (hoverTimerId.current) clearInterval(hoverTimerId.current);
-    hoverTimerId.current = setTimeout(hoverItem, 1500);
-    progressBar = e.parentNode.children[1];
-    progressBar.style.width = `${width}px`;
-    progressBar.style.transition = "1s linear";
-  }
-
-  function hoverItem() {
-    console.log("POPUP by hover");
-  }
-  function clickItem(e: any) {
-    console.log("POPUP by click");
-
-    if (hoverTimerId.current) clearInterval(hoverTimerId.current);
-    if (preventDuplicatedEventTimerId.current)
-      clearInterval(preventDuplicatedEventTimerId.current);
+  function popupItem(item: any) {
     if (wrapperRef.current) {
-      wrapperRef.current.removeEventListener("mousemove", onDragMove);
-      wrapperRef.current.removeEventListener("touchmove", onDragMove);
-      wrapperRef.current.removeEventListener("mouseleave", onDragEnd);
+      wrapperRef.current.removeEventListener("mousedown", onDragStart);
+      wrapperRef.current.removeEventListener("touchstart", onDragStart);
     }
-    // preventHover(e.target); -> onDragStart에서 호출되기 때문에 불필요함.
+    if (isDraggingRef.current === false && wrapperRef.current) {
+      console.log("click");
+      console.log(item);
+      popupRef.current!.style.visibility = "visible";
+      popupRef.current!.style.width = "100%";
+      popupRef.current!.style.height = "100%";
+      popupRef.current!.style.position = "absolute";
+      popupRef.current!.style.backgroundColor = "beige";
+      popupRef.current!.style.zIndex = "2";
+    }
+    if (hoverTimerId.current) clearInterval(hoverTimerId.current);
   }
 
   return (
@@ -310,6 +289,7 @@ const List = ({
             <ListItem
               onMouseEnterItem={onMouseEnterItem}
               onMouseLeaveItem={onMouseLeaveItem}
+              onClickItem={popupItem}
               fontSize={fontSize}
               item={item}
               width={width}
@@ -320,6 +300,23 @@ const List = ({
           );
         })}
       </StyledListItemWrapper>
+      {width > 0 && (
+        <div
+          className="popupTarget"
+          ref={popupRef}
+          style={{
+            position: "absolute",
+            maxWidth: "90em",
+            width: `${width}px`,
+            height: `${height}px`,
+            left: "50%",
+            top: "50%",
+            transform: "translate(-50%, -50%)",
+            transition: "0.3s",
+            visibility: "hidden",
+          }}
+        ></div>
+      )}
     </StyledListWrapper>
   );
 };
