@@ -64,6 +64,7 @@ const SearchBar = ({
   const [history, setHistory] = useState<Array<string>>(
     JSON.parse(localStorage.getItem("history") as string)
   );
+
   // hooks
   const [addHistory, removeHistory] = useSearchHistory();
   const [data, requestData, resetData] = useSearchPreview();
@@ -89,6 +90,9 @@ const SearchBar = ({
       if (inputRef.current.value !== "") {
         addHistory(inputRef.current.value);
         setHistory(JSON.parse(localStorage.getItem("history") as string));
+      }
+      if (history == null) {
+        setHistory([]);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -205,7 +209,7 @@ const SearchBar = ({
       if (inputRef.current.value !== "") {
         resultRef.current.classList.remove("sr-focusOut");
       }
-      if (inputRef.current.value === "" && data.length + history.length <= 0) {
+      if (inputRef.current.value === "" && history.length <= 0) {
         hideSearchBarResult();
       }
     }

@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
+import { StyledListItemWrapper } from "../../common/style";
 
 interface ListItemTitleProps {
   fontSize?: string;
@@ -27,14 +28,6 @@ const StyledListItemContainer = styled.div`
   position: relative;
 `;
 
-const StyledListItemWrapper = styled.div`
-  position: relative;
-  margin-right: 0.5em;
-  border-radius: var(--border--radius);
-  overflow: hidden;
-  display: flex;
-`;
-
 const ListItem = ({
   onMouseEnterItem,
   onMouseLeaveItem,
@@ -48,13 +41,17 @@ const ListItem = ({
   onMouseEnterItem: (
     e: React.BaseSyntheticEvent,
     progressRef: React.RefObject<HTMLDivElement>,
-    item: any
+    item: any,
+    eventTargetRef: React.RefObject<HTMLDivElement>
   ) => void;
   onMouseLeaveItem: (
     e: React.BaseSyntheticEvent,
     progressRef: React.RefObject<HTMLDivElement>
   ) => void;
-  onClickItem: (item: any) => void;
+  onClickItem: (
+    item: any,
+    eventTargetRef: React.RefObject<HTMLDivElement>
+  ) => void;
   fontSize: number;
   item: any;
   width: number;
@@ -67,25 +64,25 @@ const ListItem = ({
       : item.snippet.thumbnails.medium.url;
   const progressRef: React.RefObject<HTMLDivElement> =
     useRef<HTMLDivElement>(null);
-
-  useEffect(() => {}, []);
-
+  const eventTargetRef: React.RefObject<HTMLDivElement> =
+    useRef<HTMLDivElement>(null);
   return (
     <StyledListItemContainer>
       <div
         onMouseEnter={(e) => {
-          onMouseEnterItem(e, progressRef, item);
+          onMouseEnterItem(e, progressRef, item, eventTargetRef);
         }}
         onMouseLeave={(e) => {
           onMouseLeaveItem(e, progressRef);
         }}
         onTouchEnd={() => {
-          onClickItem(item);
+          onClickItem(item, eventTargetRef);
         }}
         onClick={() => {
-          onClickItem(item);
+          onClickItem(item, eventTargetRef);
         }}
         className="li-eventTarget"
+        ref={eventTargetRef}
         style={{
           zIndex: 1,
           position: "absolute",

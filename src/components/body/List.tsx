@@ -2,6 +2,7 @@ import React, { useEffect, useContext, useRef } from "react";
 import styled from "styled-components";
 import { PlatformContext } from "../context/PlatformContext";
 import useMainList from "../hooks/useMainList";
+import ListDummyItem from "./ListDummyItem";
 import ListItem from "./ListItem";
 
 const MAXIMUM_ITEM_PER_LIST = 10;
@@ -9,12 +10,14 @@ const MAXIMUM_ITEM_PER_LIST = 10;
 const StyledListWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: left;
-  width: 100vw;
+  width: calc(100vw - 1em);
   max-width: 90em;
   overflow: hidden;
   margin: 0.5em;
   position: relative;
+  /* @media (max-width: 1439px) {
+    padding-left: 1em;
+  } */
 `;
 
 const StyledListItemWrapper = styled.div`
@@ -117,7 +120,7 @@ const List = ({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [width, wrapperRef]);
+  }, []);
 
   function setTranslate(quantity: number) {
     if (wrapperRef.current) {
@@ -150,6 +153,8 @@ const List = ({
   }
 
   function onDragMove(e: MouseEvent | TouchEvent) {
+    console.log("onDragMove");
+
     if (!isDraggingRef.current) {
       isDraggingRef.current = true;
     }
@@ -178,13 +183,15 @@ const List = ({
   }
 
   function onDragEnd(e: MouseEvent | TouchEvent) {
+    console.log("onDragEnd");
+
     function exceedLimits(side: string) {
+      console.log("exceed");
       translatePrev.current = side === "left" ? 0 : maxWidth.current;
       if (wrapperRef.current) {
         wrapperRef.current.style.transition = "0.3s ease-out";
         wrapperRef.current.removeEventListener("mousedown", onDragStart);
         wrapperRef.current.removeEventListener("touchstart", onDragStart);
-        // wrapperRef.current.addEventListener("mouseup", clickItem);
       }
       setTranslate(translatePrev.current);
       setTimeout(() => {
@@ -192,7 +199,6 @@ const List = ({
           wrapperRef.current.style.transition = "";
           wrapperRef.current.addEventListener("mousedown", onDragStart);
           wrapperRef.current.addEventListener("touchstart", onDragStart);
-          // wrapperRef.current.addEventListener("mouseup", clickItem);
         }
       }, 300);
     }
@@ -212,6 +218,8 @@ const List = ({
       wrapperRef.current.removeEventListener("touchmove", onDragMove);
       wrapperRef.current.removeEventListener("mouseleave", onDragEnd);
       wrapperRef.current.removeEventListener("mouseup", onDragEnd);
+      wrapperRef.current.removeEventListener("touchend", onDragEnd);
+
       setTimeout(() => {
         isDraggingRef.current = false;
       }, 0);
@@ -225,12 +233,13 @@ const List = ({
   function onMouseEnterItem(
     e: React.BaseSyntheticEvent,
     progressRef: React.RefObject<HTMLDivElement>,
-    item: any
+    item: any,
+    eventTargetRef: React.RefObject<HTMLDivElement>
   ) {
     if (!isDraggingRef.current) {
       if (hoverTimerId.current) clearInterval(hoverTimerId.current);
       hoverTimerId.current = setTimeout(() => {
-        popupItem(item);
+        popupItem(item, eventTargetRef);
       }, 1500);
       if (progressRef.current) {
         progressRef.current.style.width = `${width}px`;
@@ -259,65 +268,82 @@ const List = ({
     }
   }
 
-  function popupItem(item: any) {
+  function popupItem(
+    item: any,
+    eventTargetRef: React.RefObject<HTMLDivElement>
+  ) {
     if (wrapperRef.current) {
       wrapperRef.current.removeEventListener("mousedown", onDragStart);
       wrapperRef.current.removeEventListener("touchstart", onDragStart);
     }
-    if (isDraggingRef.current === false && wrapperRef.current) {
-      console.log("click");
-      console.log(item);
-      popupRef.current!.style.visibility = "visible";
-      popupRef.current!.style.width = "100%";
-      popupRef.current!.style.height = "100%";
-      popupRef.current!.style.position = "absolute";
-      popupRef.current!.style.backgroundColor = "beige";
-      popupRef.current!.style.zIndex = "2";
+    if (
+      isDraggingRef.current === false &&
+      wrapperRef.current &&
+      eventTargetRef.current &&
+      popupRef.current
+    ) {
+      popupRef.current.style.position = "";
+      popupRef.current.style.width = `${
+        width * itemPerPage + 8 * (itemPerPage - 1)
+      }px`;
+      popupRef.current.style.height = `${height * 4}px`;
+      popupRef.current.style.transition = `0.3s`;
+      popupRef.current.style.background = `beige`;
+      popupRef.current.style.visibility = `visible`;
     }
     if (hoverTimerId.current) clearInterval(hoverTimerId.current);
   }
 
   return (
-    <StyledListWrapper>
-      <StyledListTitle>{title}</StyledListTitle>
-      <StyledListItemWrapper
-        style={{ transform: "translateX(0px)" }}
-        ref={wrapperRef}
-      >
-        {data.map((item: any) => {
-          return (
-            <ListItem
-              onMouseEnterItem={onMouseEnterItem}
-              onMouseLeaveItem={onMouseLeaveItem}
-              onClickItem={popupItem}
-              fontSize={fontSize}
-              item={item}
+    <>
+      <StyledListWrapper>
+        <StyledListTitle>{title}</StyledListTitle>
+        <StyledListItemWrapper
+          style={{ transform: "translateX(0px)" }}
+          ref={wrapperRef}
+        >
+          {data.length > 0 &&
+            data.map((item: any) => {
+              return (
+                <ListItem
+                  onMouseEnterItem={onMouseEnterItem}
+                  onMouseLeaveItem={onMouseLeaveItem}
+                  onClickItem={popupItem}
+                  fontSize={fontSize}
+                  item={item}
+                  width={width}
+                  height={height}
+                  imgQuality={imgQuality}
+                  key={item.etag}
+                />
+              );
+            })}
+          {data.length === 0 && (
+            <ListDummyItem
+              itemPerPage={itemPerPage}
               width={width}
               height={height}
-              imgQuality={imgQuality}
-              key={item.etag}
             />
-          );
-        })}
-      </StyledListItemWrapper>
+          )}
+        </StyledListItemWrapper>
+      </StyledListWrapper>
       {width > 0 && (
         <div
-          className="popupTarget"
           ref={popupRef}
           style={{
             position: "absolute",
             maxWidth: "90em",
             width: `${width}px`,
             height: `${height}px`,
-            left: "50%",
-            top: "50%",
-            transform: "translate(-50%, -50%)",
-            transition: "0.3s",
+            borderRadius: "var(--border--radius)",
+            transition: "0",
             visibility: "hidden",
           }}
-        ></div>
+        >
+          <img src="" alt="" />
+        </div>
       )}
-    </StyledListWrapper>
+    </>
   );
 };
 

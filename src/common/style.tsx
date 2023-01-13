@@ -32,6 +32,8 @@ body::-webkit-scrollbar {
 }
 
 .sr-focusOut, .hidden {
+  position: absolute;
+  z-index: -1;
   visibility: hidden;
 }
 .si-focusIn {
@@ -47,7 +49,10 @@ body::-webkit-scrollbar {
 .fa-solid {
   font-size: 1.25em;
 }
-
+.pt-inactive{
+  display:none;
+  position: absolute;
+}
 
 `;
 
@@ -129,7 +134,18 @@ export const StyledSearchResultItem = styled.div`
 export const StyledBodyWrapper = styled.div`
   box-sizing: border-box;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   width: 100vw;
-  height: calc(100vh - 3.375em);
+  min-height: calc(100vh - 3.375em);
+  margin-bottom: 0.5em;
+`;
+
+export const StyledListItemWrapper = styled.div`
+  position: relative;
+  margin-right: 0.5em;
+  border-radius: var(--border--radius);
+  overflow: hidden;
+  display: flex;
 `;
