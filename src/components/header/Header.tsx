@@ -7,8 +7,9 @@ import SearchBar from "./SearchBar";
 const StyledHeaderWrapper = styled.div`
   background-color: var(--color--header);
   color: var(--color--white);
-  position: relative;
-  width: inherit;
+  z-index: 10;
+  position: fixed;
+  width: 100vw;
   height: 3.25em;
   display: flex;
   justify-content: center;
@@ -21,7 +22,7 @@ const StyledHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100vw;
+  width: calc(100vw - 1em);
   max-width: 90em;
   margin: 0 0.5em 0 0.5em;
 `;

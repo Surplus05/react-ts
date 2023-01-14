@@ -39,7 +39,7 @@ const List = ({
   videoCategoryId,
 }: {
   title: string;
-  videoCategoryId: string;
+  videoCategoryId?: string;
 }) => {
   const [data, requestData] = useMainList();
   const context = useContext(PlatformContext);
@@ -84,7 +84,7 @@ const List = ({
   height = (width * 9) / 16;
 
   useEffect(() => {
-    requestData(videoCategoryId);
+    if (videoCategoryId != null) requestData(videoCategoryId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
