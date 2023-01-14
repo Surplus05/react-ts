@@ -1,9 +1,11 @@
-import React, { useEffect, useContext, useRef } from "react";
+import React, { useEffect, useContext, useRef, useState } from "react";
 import styled from "styled-components";
 import { PlatformContext } from "../context/PlatformContext";
+import useContentsSizes from "../hooks/useContentsSizes";
 import useMainList from "../hooks/useMainList";
 import ListDummyItem from "./ListDummyItem";
 import ListItem from "./ListItem";
+import PopupItem from "./PopupItem";
 
 const MAXIMUM_ITEM_PER_LIST = 10;
 
@@ -15,9 +17,6 @@ const StyledListWrapper = styled.div`
   overflow: hidden;
   margin: 0.5em;
   position: relative;
-  /* @media (max-width: 1439px) {
-    padding-left: 1em;
-  } */
 `;
 
 const StyledListItemWrapper = styled.div`
@@ -44,9 +43,10 @@ const List = ({
   const [data, requestData] = useMainList();
   const context = useContext(PlatformContext);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const popupRef = useRef<HTMLDivElement>(null);
   const translatePrev = useRef<number>(0);
   const maxWidth = useRef<number>(0);
+  const [popupItemCompoent, setPopupItemCompoent] =
+    useState<JSX.Element | null>(null);
 
   const hoverTimerId: React.MutableRefObject<NodeJS.Timeout | null> =
     useRef<NodeJS.Timeout | null>(null);
@@ -54,34 +54,7 @@ const List = ({
 
   let startX = -1;
   let endX = -1;
-  let itemPerPage = 5;
-  let fontSize = 1;
-  let imgQuality = "high";
-  let width = 0;
-  let height = 0;
-
-  if (context.platform === "DESKTOP") {
-    imgQuality = "high";
-    if (context.innerWidth >= 1024) {
-      fontSize = 0.875;
-      itemPerPage = 5;
-    } else if (context.innerWidth >= 768 && context.innerWidth < 1024) {
-      fontSize = 0.75;
-      itemPerPage = 4;
-    } else if (context.innerWidth >= 500 && context.innerWidth < 768) {
-      fontSize = 0.75;
-      itemPerPage = 3;
-    }
-  } else {
-    fontSize = 0.625;
-    imgQuality = "medium";
-    itemPerPage = 2;
-  }
-  width = (context.innerWidth - 16) / itemPerPage - 8 + 8 / itemPerPage;
-  if (context.innerWidth >= 1440) {
-    width = 1440 / itemPerPage - 8 + 8 / itemPerPage;
-  }
-  height = (width * 9) / 16;
+  let [itemPerPage, fontSize, imgQuality, width, height] = useContentsSizes();
 
   useEffect(() => {
     if (videoCategoryId != null) requestData(videoCategoryId);
@@ -153,8 +126,6 @@ const List = ({
   }
 
   function onDragMove(e: MouseEvent | TouchEvent) {
-    console.log("onDragMove");
-
     if (!isDraggingRef.current) {
       isDraggingRef.current = true;
     }
@@ -183,10 +154,7 @@ const List = ({
   }
 
   function onDragEnd(e: MouseEvent | TouchEvent) {
-    console.log("onDragEnd");
-
     function exceedLimits(side: string) {
-      console.log("exceed");
       translatePrev.current = side === "left" ? 0 : maxWidth.current;
       if (wrapperRef.current) {
         wrapperRef.current.style.transition = "0.3s ease-out";
@@ -272,24 +240,10 @@ const List = ({
     item: any,
     eventTargetRef: React.RefObject<HTMLDivElement>
   ) {
-    if (wrapperRef.current) {
-      wrapperRef.current.removeEventListener("mousedown", onDragStart);
-      wrapperRef.current.removeEventListener("touchstart", onDragStart);
-    }
-    if (
-      isDraggingRef.current === false &&
-      wrapperRef.current &&
-      eventTargetRef.current &&
-      popupRef.current
-    ) {
-      popupRef.current.style.position = "";
-      popupRef.current.style.width = `${
-        width * itemPerPage + 8 * (itemPerPage - 1)
-      }px`;
-      popupRef.current.style.height = `${height * 4}px`;
-      popupRef.current.style.transition = `0.3s`;
-      popupRef.current.style.background = `beige`;
-      popupRef.current.style.visibility = `visible`;
+    if (!isDraggingRef.current) {
+      setPopupItemCompoent(
+        <PopupItem item={item} setPopupItemCompoent={setPopupItemCompoent} />
+      );
     }
     if (hoverTimerId.current) clearInterval(hoverTimerId.current);
   }
@@ -327,22 +281,7 @@ const List = ({
           )}
         </StyledListItemWrapper>
       </StyledListWrapper>
-      {width > 0 && (
-        <div
-          ref={popupRef}
-          style={{
-            position: "absolute",
-            maxWidth: "90em",
-            width: `${width}px`,
-            height: `${height}px`,
-            borderRadius: "var(--border--radius)",
-            transition: "0",
-            visibility: "hidden",
-          }}
-        >
-          <img src="" alt="" />
-        </div>
-      )}
+      {popupItemCompoent}
     </>
   );
 };

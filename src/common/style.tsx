@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle, keyframes } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
 :root {
@@ -9,6 +9,7 @@ const GlobalStyle = createGlobalStyle`
   --color--black: #0E0E10;
   --color--white: #fff;
   --color--title: #0000009f;
+  --color--titleBar:#4b4b4b33;
 
   --border--radius: 0.375em;
 
@@ -148,4 +149,15 @@ export const StyledListItemWrapper = styled.div`
   border-radius: var(--border--radius);
   overflow: hidden;
   display: flex;
+`;
+
+export const fadeInPopupItem = (x: number, y: number) => keyframes`
+  from{
+    width: 0px;
+    height: 0px;
+  }
+  to {
+    width: ${x}px;
+    height: ${y}px;
+  }
 `;

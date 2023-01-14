@@ -16,8 +16,8 @@ const StyledListItemTitle = styled.span<ListItemTitleProps>`
   overflow: hidden;
   user-select: none;
   font-weight: bold;
-  width: ${({ width }) => `${width}px`};
   text-overflow: ellipsis;
+  width: ${({ width }) => `${width}px`};
   font-size: ${({ fontSize }) => {
     if (fontSize) return `${fontSize}px`;
     return "1em";
