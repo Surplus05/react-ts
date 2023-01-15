@@ -9,7 +9,8 @@ const GlobalStyle = createGlobalStyle`
   --color--black: #0E0E10;
   --color--white: #fff;
   --color--title: #0000009f;
-  --color--titleBar:#4b4b4b33;
+  --color--titleBar:#272727;
+  --color--division:#808080;
 
   --border--radius: 0.375em;
 
@@ -29,7 +30,7 @@ body {
   font-family: 'KoPubWorldDotum';
 }
 body::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera*/
+  display: none;
 }
 
 .sr-focusOut, .hidden {
@@ -55,6 +56,18 @@ body::-webkit-scrollbar {
   position: absolute;
 }
 
+.scroll {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
+  &:hover::-webkit-scrollbar-thumb {
+    border-radius: var(--border--radius);
+    background-color: gray;
+  }
+}
 `;
 
 export default GlobalStyle;

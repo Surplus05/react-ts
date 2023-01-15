@@ -2,13 +2,24 @@ import React, { Dispatch, SetStateAction, useEffect } from "react";
 import styled from "styled-components";
 import { fadeInPopupItem, StyledIconWrapper } from "../../common/style";
 import useContentsSizes from "../hooks/useContentsSizes";
+import VideoDetail from "./VideoDetail";
 
 interface PopupItemProps {
   width: number;
   height: number;
 }
 
-const StyledPopupItemDiv = styled.div<PopupItemProps>`
+const StyledPopupItemMain = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const StyledPopupItemWrapper = styled.div<PopupItemProps>`
+  position: relative;
   max-width: 90em;
   border-radius: var(--border--radius);
   background: var(--color--header);
@@ -21,6 +32,8 @@ const StyledPopupItemDiv = styled.div<PopupItemProps>`
 `;
 
 const StyledPopupItemTitleBar = styled.div`
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -47,19 +60,28 @@ const PopupItem = ({
   setPopupItemCompoent: Dispatch<SetStateAction<JSX.Element | null>>;
 }) => {
   const PopupItemRef = React.useRef<HTMLDivElement>(null);
-  let [itemPerPage, , , width, height] = useContentsSizes();
-  let videoAreaHeight;
-  let videoAreaWidth;
+  let [itemPerPage, fontSize, , width, height] = useContentsSizes();
+  let videoAreaHeight: number;
+  let videoAreaWidth: number;
+  let descriptionHeight: number;
+  let descriptionWidth: number;
+  let totalWidth: number;
+  let totalHeight: number;
+
+  totalWidth = width * itemPerPage + 8 * (itemPerPage - 1);
   if (itemPerPage > 3) {
-    height = width * (itemPerPage / 2);
-    videoAreaHeight = height - 52;
+    totalHeight = width * (itemPerPage / 2);
+    videoAreaHeight = totalHeight - 52;
     videoAreaWidth = (videoAreaHeight * 16) / 9;
+    descriptionWidth = totalWidth - videoAreaWidth - 6;
+    descriptionHeight = videoAreaHeight;
   } else {
-    height = width * 3;
+    totalHeight = width * 4;
     videoAreaWidth = width * itemPerPage + 8 * (itemPerPage - 1);
     videoAreaHeight = (videoAreaWidth * 9) / 16;
+    descriptionWidth = videoAreaWidth;
+    descriptionHeight = totalHeight - videoAreaHeight - 52;
   }
-  width = width * itemPerPage + 8 * (itemPerPage - 1);
 
   useEffect(() => {
     setTimeout(() => {
@@ -68,14 +90,9 @@ const PopupItem = ({
   }, []);
 
   useEffect(() => {
-    // Request Detail
-    console.log(item);
-  }, [item]);
-
-  useEffect(() => {
     if (PopupItemRef.current) {
-      PopupItemRef.current.style.width = `${width}px`;
-      PopupItemRef.current.style.height = `${height}px`;
+      PopupItemRef.current.style.width = `${totalWidth}px`;
+      PopupItemRef.current.style.height = `${totalHeight}px`;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [width]);
@@ -89,9 +106,12 @@ const PopupItem = ({
       setPopupItemCompoent(null);
     }, 750);
   };
-
   return (
-    <StyledPopupItemDiv ref={PopupItemRef} width={width} height={height}>
+    <StyledPopupItemWrapper
+      ref={PopupItemRef}
+      width={totalWidth}
+      height={totalHeight}
+    >
       <StyledPopupItemTitleBar>
         <StyledPopupItemTitle>
           {item.snippet.localized.title + " | " + item.snippet.channelTitle}
@@ -100,14 +120,44 @@ const PopupItem = ({
           <i className="fa-solid fa-xmark" />
         </StyledIconWrapper>
       </StyledPopupItemTitleBar>
-      <div
-        style={{
-          height: `${videoAreaHeight}px`,
-          width: `${videoAreaWidth}px`,
-          background: "gray",
-        }}
-      ></div>
-    </StyledPopupItemDiv>
+      <StyledPopupItemMain>
+        <div
+          style={{
+            top: "0",
+            height: `${videoAreaHeight}px`,
+            width: `${videoAreaWidth}px`,
+            background: "gray",
+            overflow: "hidden",
+          }}
+        >
+          <iframe
+            src={`https://www.youtube.com/embed/${item.id}?autoplay=1&modestbranding=1`}
+            frameBorder="0"
+            width={videoAreaWidth}
+            height={videoAreaHeight}
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture "
+          ></iframe>
+        </div>
+        <div
+          className="scroll"
+          style={{
+            overflowY: "scroll",
+            paddingLeft: "0.375em",
+            overflowX: "hidden",
+            margin: "0.5em",
+            maxWidth: `${descriptionWidth - 16}px`,
+            maxHeight: `${descriptionHeight - 16}px`,
+          }}
+        >
+          <VideoDetail
+            fontSize={fontSize}
+            videoId={item.id}
+            videoSnippet={item.snippet}
+          ></VideoDetail>
+        </div>
+      </StyledPopupItemMain>
+    </StyledPopupItemWrapper>
   );
 };
 

@@ -35,3 +35,35 @@ export async function getVideoListTrending(videoCategoryId: string) {
 
   return await axios(options);
 }
+
+export async function getVideoDetail(videoId: string) {
+  const options = {
+    method: "get",
+    url: "https://www.googleapis.com/youtube/v3/videos",
+    params: {
+      part: "statistics",
+      key: process.env.REACT_APP_YOUTUBE_API_KEY,
+      regionCode: "kr",
+      id: videoId,
+      maxResults: "1",
+      type: "video",
+      videoEmbeddable: "true",
+    },
+  };
+
+  return await axios(options);
+}
+export async function getVideoComments(videoId: string) {
+  const options = {
+    method: "get",
+    url: "https://www.googleapis.com/youtube/v3/commentThreads",
+    params: {
+      part: "snippet,replies",
+      key: process.env.REACT_APP_YOUTUBE_API_KEY,
+      videoId,
+      order: "relevance",
+    },
+  };
+
+  return await axios(options);
+}
