@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
 import { StyledListItemWrapper } from "../../common/style";
+import { getTitle } from "../service/Functions";
 
 interface ListItemTitleProps {
   fontSize?: string;
@@ -66,6 +67,7 @@ const ListItem = ({
     useRef<HTMLDivElement>(null);
   const eventTargetRef: React.RefObject<HTMLDivElement> =
     useRef<HTMLDivElement>(null);
+  let title = getTitle(item);
   return (
     <StyledListItemContainer>
       <div
@@ -103,14 +105,14 @@ const ListItem = ({
       ></div>
       <StyledListItemWrapper>
         <StyledListItemTitle width={width} fontSize={`${fontSize * 16}`}>
-          {item.snippet.localized.title + " | " + item.snippet.channelTitle}
+          {title + " | " + item.snippet.channelTitle}
         </StyledListItemTitle>
         <img
           style={{ objectFit: "cover", userSelect: "none" }}
           width={width}
           height={height}
           src={imgSrc}
-          alt={item.snippet.localized.title}
+          alt={title}
         />
       </StyledListItemWrapper>
     </StyledListItemContainer>

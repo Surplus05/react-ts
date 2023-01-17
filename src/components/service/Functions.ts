@@ -12,3 +12,17 @@ export function setDigits(viewCount: number): string {
 
   return processedViews;
 }
+
+export function getTitle(item: any): string {
+  let result: string = "";
+  if (item.snippet.localized != null) result = item.snippet.localized.title;
+  if (item.snippet.title != null) result = item.snippet.title;
+  return result;
+}
+
+export function getVideoId(item: any): string {
+  let result: string = "";
+  if (item.id != null) result = item.id;
+  if (item.id.videoId != null) result = item.id.videoId;
+  return result;
+}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { setDigits } from "../service/Views";
+import { setDigits } from "../service/Functions";
 import { getVideoDetail } from "../service/Youtube";
 import VideoDetailComments from "./VideoDetailComments";
 import VideoDetailDivision from "./VideoDetailDivision";

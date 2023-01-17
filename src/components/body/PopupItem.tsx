@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction, useEffect } from "react";
 import styled from "styled-components";
 import { fadeInPopupItem, StyledIconWrapper } from "../../common/style";
 import useContentsSizes from "../hooks/useContentsSizes";
+import { getTitle, getVideoId } from "../service/Functions";
 import VideoDetail from "./VideoDetail";
 
 interface PopupItemProps {
@@ -67,6 +68,8 @@ const PopupItem = ({
   let descriptionWidth: number;
   let totalWidth: number;
   let totalHeight: number;
+  let title = getTitle(item);
+  let videoId = getVideoId(item);
 
   totalWidth = width * itemPerPage + 8 * (itemPerPage - 1);
   if (itemPerPage > 3) {
@@ -76,7 +79,7 @@ const PopupItem = ({
     descriptionWidth = totalWidth - videoAreaWidth - 6;
     descriptionHeight = videoAreaHeight;
   } else {
-    totalHeight = width * 4;
+    totalHeight = width * 3;
     videoAreaWidth = width * itemPerPage + 8 * (itemPerPage - 1);
     videoAreaHeight = (videoAreaWidth * 9) / 16;
     descriptionWidth = videoAreaWidth;
@@ -114,7 +117,7 @@ const PopupItem = ({
     >
       <StyledPopupItemTitleBar>
         <StyledPopupItemTitle>
-          {item.snippet.localized.title + " | " + item.snippet.channelTitle}
+          {title + " | " + item.snippet.channelTitle}
         </StyledPopupItemTitle>
         <StyledIconWrapper onClick={hidePopupItem}>
           <i className="fa-solid fa-xmark" />
@@ -129,9 +132,10 @@ const PopupItem = ({
             background: "gray",
             overflow: "hidden",
           }}
+          data-videoid={videoId}
         >
           <iframe
-            src={`https://www.youtube.com/embed/${item.id}?autoplay=1&modestbranding=1`}
+            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&modestbranding=1`}
             frameBorder="0"
             width={videoAreaWidth}
             height={videoAreaHeight}
@@ -152,7 +156,7 @@ const PopupItem = ({
         >
           <VideoDetail
             fontSize={fontSize}
-            videoId={item.id}
+            videoId={videoId}
             videoSnippet={item.snippet}
           ></VideoDetail>
         </div>

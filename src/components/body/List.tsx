@@ -1,6 +1,7 @@
 import React, { useEffect, useContext, useRef, useState } from "react";
 import styled from "styled-components";
 import { PlatformContext } from "../context/PlatformContext";
+import useSearchPreview from "../hooks/useSearchPreview";
 import useContentsSizes from "../hooks/useContentsSizes";
 import useMainList from "../hooks/useMainList";
 import ListDummyItem from "./ListDummyItem";
@@ -36,11 +37,25 @@ const StyledListTitle = styled.span`
 const List = ({
   title,
   videoCategoryId,
+  query,
 }: {
   title: string;
   videoCategoryId?: string;
+  query?: string;
 }) => {
-  const [data, requestData] = useMainList();
+  let data: any;
+  let requestData: any;
+  const [trendingData, requestTrendingData] = useMainList();
+  const [searchData, requestSearchData] = useSearchPreview();
+  if (videoCategoryId != null) {
+    data = trendingData;
+    requestData = requestTrendingData;
+  }
+  if (query != null) {
+    data = searchData;
+    requestData = requestSearchData;
+  }
+
   const context = useContext(PlatformContext);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const translatePrev = useRef<number>(0);
@@ -58,8 +73,9 @@ const List = ({
 
   useEffect(() => {
     if (videoCategoryId != null) requestData(videoCategoryId);
+    if (query != null) requestData(query, MAXIMUM_ITEM_PER_LIST);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [query]);
 
   useEffect(() => {
     let innerWidth = context.innerWidth > 1440 ? 1440 : context.innerWidth;
@@ -77,7 +93,7 @@ const List = ({
         setTranslate(maxWidth.current);
       }
     }
-  }, [data, context.innerWidth, width]);
+  }, [context.innerWidth, width]);
 
   useEffect(() => {
     if (wrapperRef.current) {
