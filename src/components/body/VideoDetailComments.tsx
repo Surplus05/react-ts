@@ -40,7 +40,10 @@ const VideoDetailComments = ({
     <StyledCommentsWrapper>
       {comments.map((comment: any) => {
         return (
-          <span style={{ display: "block", fontSize: `${fontSize}em` }}>
+          <span
+            key={comment.id}
+            style={{ display: "block", fontSize: `${fontSize}em` }}
+          >
             {"[" +
               comment.snippet.topLevelComment.snippet.authorDisplayName +
               "] - " +

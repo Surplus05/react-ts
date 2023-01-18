@@ -174,3 +174,15 @@ export const fadeInPopupItem = (x: number, y: number) => keyframes`
     height: ${y}px;
   }
 `;
+
+export const StyledUserInfoItemWrapper = styled.div`
+  border: 0.125em solid #888;
+  flex-direction: column;
+  user-select: none;
+  text-align: center;
+  margin: 1em;
+  padding: 1em;
+  border-radius: var(--border--radius);
+  background: var(--color--header);
+  max-width: 24em;
+`;

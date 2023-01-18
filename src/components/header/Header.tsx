@@ -1,4 +1,5 @@
 import React, { useContext, useRef } from "react";
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 import { StyledIconWrapper } from "../../common/style";
 import { PlatformContext } from "../context/PlatformContext";
@@ -36,6 +37,7 @@ const StyledLogo = styled.a`
 const Header = () => {
   const wrapperRef = useRef<HTMLInputElement>(null);
   const context = useContext(PlatformContext);
+  const navigate = useNavigate();
 
   const toggleSearchBar = () => {
     if (wrapperRef.current) wrapperRef.current.classList.toggle("hidden");
@@ -55,7 +57,12 @@ const Header = () => {
             <i className="fa-solid fa-magnifying-glass toggleBtn" />
           </StyledIconWrapper>
         )}
-        <StyledIconWrapper tabIndex={3}>
+        <StyledIconWrapper
+          onClick={() => {
+            navigate("/user");
+          }}
+          tabIndex={3}
+        >
           <i className="fa-solid fa-user" />
         </StyledIconWrapper>
       </StyledHeader>

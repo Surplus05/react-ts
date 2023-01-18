@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { setDigits } from "../service/Functions";
 import { getVideoDetail } from "../service/Youtube";
+import PlaylistButton from "./PlaylistButton";
 import VideoDetailComments from "./VideoDetailComments";
 import VideoDetailDivision from "./VideoDetailDivision";
 
@@ -28,6 +29,7 @@ const StyledTag = styled.span`
   margin: 0.25em;
   padding: 0.5em 0.75em;
 `;
+
 const StyledDescWrapper = styled.div`
   margin: 0.5em 0;
 `;
@@ -67,6 +69,7 @@ const VideoDetail = ({
         <span>{processedViews} Views</span>
         <span>{dateString} 업로드</span>
       </StyledStatWrapper>
+      <PlaylistButton videoId={videoId} title={videoSnippet.title} />
       <StyledTagWrapper style={{ fontSize: `${fontSize}em` }}>
         {videoSnippet.tags &&
           videoSnippet.tags.map((tag: any, index: number) => {

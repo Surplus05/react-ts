@@ -6,8 +6,13 @@ import Main from "./components/body/Main";
 import SearchResult from "./components/body/SearchResult";
 import { PlatformProvider } from "./components/context/PlatformContext";
 import Header from "./components/header/Header";
+import User from "./components/user/User";
 
 function App() {
+  const uid: string | null = localStorage.getItem("uid");
+  if (!uid) {
+    localStorage.setItem("uid", Math.random().toString(36).substring(2, 10));
+  }
   return (
     <PlatformProvider>
       <GlobalStyle />
@@ -17,6 +22,7 @@ function App() {
           <Route path="/" element={<Body />}>
             <Route path="/" element={<Main />}></Route>
             <Route path="/result" element={<SearchResult />}></Route>
+            <Route path="/user" element={<User />}></Route>
           </Route>
         </Routes>
       </BrowserRouter>

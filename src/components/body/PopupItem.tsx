@@ -146,6 +146,7 @@ const PopupItem = ({
         <div
           className="scroll"
           style={{
+            width: "100%",
             overflowY: "scroll",
             paddingLeft: "0.375em",
             overflowX: "hidden",
