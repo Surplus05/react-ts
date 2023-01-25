@@ -26,12 +26,14 @@ const Watch = () => {
 
   let videoAreaHeight: number;
 
-  if (context.innerWidth >= 900) {
+  if (context.innerWidth >= 748) {
     videoAreaHeight = -1;
-  } else if (context.innerWidth < 900 && context.innerWidth > 500) {
+  } else if (context.innerWidth < 748 && context.innerWidth > 500) {
     videoAreaHeight = ((context.innerWidth - 52) * 9) / 16;
-  } else {
+  } else if (context.innerWidth <= 500 && context.innerWidth > 300) {
     videoAreaHeight = (context.innerWidth * 9) / 16;
+  } else {
+    videoAreaHeight = (context.innerWidth * 9) / 16 + 12;
   }
 
   useEffect(() => {}, [channelId, requestData]);
@@ -67,7 +69,7 @@ const Watch = () => {
       setIsExpand(false);
     }
 
-    if (context.innerWidth >= 900) setIsRow(true);
+    if (context.innerWidth >= 748) setIsRow(true);
     else setIsRow(false);
   }, [context.innerWidth]);
 
