@@ -19,7 +19,7 @@ const StyledSearchBar = styled.div`
   box-sizing: border-box;
   overflow: hidden;
   border-radius: var(--border--radius) 0 0 var(--border--radius);
-  background-color: var(--primary--search--background);
+  background-color: var(--color--header--background);
   width: inherit;
   margin: 0 1px 0 0;
 `;

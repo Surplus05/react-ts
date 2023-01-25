@@ -67,3 +67,16 @@ export async function getVideoComments(videoId: string) {
 
   return await axios(options);
 }
+export async function getChannelInfo(channelId: string) {
+  const options = {
+    method: "get",
+    url: "https://www.googleapis.com/youtube/v3/channels",
+    params: {
+      part: "id,snippet,contentDetails,statistics",
+      key: process.env.REACT_APP_YOUTUBE_API_KEY,
+      id: channelId,
+    },
+  };
+
+  return await axios(options);
+}

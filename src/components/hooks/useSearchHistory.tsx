@@ -3,7 +3,7 @@ export default function useSearchHistory(): [
   (query: string) => void
 ] {
   function addHistory(query: string) {
-    const history: string | null = localStorage.getItem("history");
+    const history: string | null = localStorage.getItem("searchHistory");
 
     if (history != null) {
       const temp: Array<String> = JSON.parse(history);
@@ -12,14 +12,14 @@ export default function useSearchHistory(): [
       });
       if (idx !== -1) temp.splice(idx, 1);
       temp.splice(0, 0, query);
-      localStorage.setItem("history", JSON.stringify(temp));
+      localStorage.setItem("searchHistory", JSON.stringify(temp));
     } else {
-      localStorage.setItem("history", JSON.stringify([query]));
+      localStorage.setItem("searchHistory", JSON.stringify([query]));
     }
   }
 
   function removeHistory(query: string) {
-    const history: string | null = localStorage.getItem("history");
+    const history: string | null = localStorage.getItem("searchHistory");
     if (history != null) {
       const temp: Array<String> = JSON.parse(history);
       const idx = temp.findIndex((value) => {
@@ -28,9 +28,9 @@ export default function useSearchHistory(): [
       if (idx !== -1) {
         temp.splice(idx, 1);
       }
-      localStorage.setItem("history", JSON.stringify(temp));
+      localStorage.setItem("searchHistory", JSON.stringify(temp));
     } else {
-      throw new Error(`unknown history Error ${query}`);
+      throw new Error(`unknown searchHistory Error ${query}`);
     }
   }
   return [addHistory, removeHistory];

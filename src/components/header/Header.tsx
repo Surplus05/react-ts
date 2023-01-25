@@ -1,7 +1,6 @@
 import React, { useContext, useRef } from "react";
-import { useNavigate } from "react-router";
 import styled from "styled-components";
-import { StyledIconWrapper } from "../../common/style";
+import { StyledIconLink, StyledIconWrapper } from "../../common/style";
 import { PlatformContext } from "../context/PlatformContext";
 import SearchBar from "./SearchBar";
 
@@ -24,7 +23,6 @@ const StyledHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   width: calc(100vw - 1em);
-  max-width: 90em;
   margin: 0 0.5em 0 0.5em;
 `;
 
@@ -37,7 +35,6 @@ const StyledLogo = styled.a`
 const Header = () => {
   const wrapperRef = useRef<HTMLInputElement>(null);
   const context = useContext(PlatformContext);
-  const navigate = useNavigate();
 
   const toggleSearchBar = () => {
     if (wrapperRef.current) wrapperRef.current.classList.toggle("hidden");
@@ -57,14 +54,9 @@ const Header = () => {
             <i className="fa-solid fa-magnifying-glass toggleBtn" />
           </StyledIconWrapper>
         )}
-        <StyledIconWrapper
-          onClick={() => {
-            navigate("/user");
-          }}
-          tabIndex={3}
-        >
+        <StyledIconLink href="/user" tabIndex={3}>
           <i className="fa-solid fa-user" />
-        </StyledIconWrapper>
+        </StyledIconLink>
       </StyledHeader>
     </StyledHeaderWrapper>
   );

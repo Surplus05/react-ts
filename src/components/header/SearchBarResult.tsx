@@ -19,18 +19,13 @@ const SearchBarResult = ({
   history,
   data,
   isTypingNow,
-  onClickItem,
   onClickRemove,
 }: SearchBarResultProps) => {
   return (
     <StyledSearchBarResult ref={resultRef}>
       {isTypingNow && <Loadingcircle />}
-      <SearchBarResultPreview data={data} onClickPreview={onClickItem} />
-      <SearchBarResultHistory
-        history={history}
-        onClickHistory={onClickItem}
-        onClickRemove={onClickRemove}
-      />
+      <SearchBarResultPreview data={data} />
+      <SearchBarResultHistory history={history} onClickRemove={onClickRemove} />
     </StyledSearchBarResult>
   );
 };

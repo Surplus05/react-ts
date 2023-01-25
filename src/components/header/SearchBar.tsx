@@ -28,7 +28,6 @@ export interface SearchBarResultProps {
   history: Array<string>;
   data: Array<Object>;
   isTypingNow: boolean | null;
-  onClickItem: (q: string) => void;
   onClickRemove: (q: string) => void;
 }
 
@@ -62,7 +61,7 @@ const SearchBar = ({
 
   // states
   const [history, setHistory] = useState<Array<string>>(
-    JSON.parse(localStorage.getItem("history") as string)
+    JSON.parse(localStorage.getItem("searchHistory") as string)
   );
 
   // hooks
@@ -89,7 +88,7 @@ const SearchBar = ({
       inputRef.current.value = searchParams.get("q") as string;
       if (inputRef.current.value !== "") {
         addHistory(inputRef.current.value);
-        setHistory(JSON.parse(localStorage.getItem("history") as string));
+        setHistory(JSON.parse(localStorage.getItem("searchHistory") as string));
       }
       if (history == null) {
         setHistory([]);
@@ -124,7 +123,7 @@ const SearchBar = ({
         wrapperRef.current.classList.add("hidden");
       inputRef.current.value = q;
       addHistory(q);
-      setHistory(JSON.parse(localStorage.getItem("history") as string));
+      setHistory(JSON.parse(localStorage.getItem("searchHistory") as string));
       inputRef.current.blur();
       resetData();
       navigate(`/result?q=${q}`);
@@ -215,20 +214,16 @@ const SearchBar = ({
     }
   };
 
-  const onClickItem = (q: string) => {
-    pageMove(q);
-  };
-
   const onClickRemove = (q: string) => {
     let idx = -1;
     if (history != null)
       idx = history.findIndex((value) => {
         return value === q;
       });
-    if (idx === -1) throw new Error(`unknown history Error ${q}`);
+    if (idx === -1) throw new Error(`unknown searchHistory Error ${q}`);
     if (history.length === 1 && data.length < 0) hideSearchBarResult();
     removeHistory(q);
-    setHistory(JSON.parse(localStorage.getItem("history") as string));
+    setHistory(JSON.parse(localStorage.getItem("searchHistory") as string));
   };
 
   useOutsideDetector(wrapperRef, resultRef, context.platform);
@@ -245,7 +240,6 @@ const SearchBar = ({
         data={data}
         resultRef={resultRef}
         isTypingNow={isTypingNow.current}
-        onClickItem={onClickItem}
         onClickRemove={onClickRemove}
       />
       <SearchBarInputArea

@@ -11,17 +11,14 @@ const GlobalStyle = createGlobalStyle`
   --color--title: #0000009f;
   --color--titleBar:#272727;
   --color--division:#808080;
+  --color--search--background: rgb(50, 50, 50);
+  --color--header--background: rgb(16,16,16);
+  --color--header--background--hover: rgba(255, 255, 255, 0.25);
+  --color--main: #ee7272;
+  --color--loadingCircle:rgba(128,128,128,1);
 
   --border--radius: 0.375em;
 
-  --primary--black--color: #191f28;
-  --primary--color: #ee7272;
-  --primary--color--hover:#ef8080;
-  --primary--header--background: rgb(16,16,16);
-  --primary--search--background: rgb(50, 50, 50);
-  --primary--search--background--hover: rgba(255, 255, 255, 0.25);
-  --primary--loading-circle-color: rgba(128,128,128,1);
-  --primary--item--title--background: rgba(255,255,255,0.5);
 }
 
 body {
@@ -39,13 +36,13 @@ body::-webkit-scrollbar {
   visibility: hidden;
 }
 .si-focusIn {
-  border: 2px solid var(--primary--color);
+  border: 2px solid var(--color--main);
   background-color: #000;
 }
 .si-focusOut {
   border: 2px solid transparent;
   &:hover {
-    border: 2px solid var(--primary--search--background--hover);
+    border: 2px solid var(--color--header--background--hover);
   }
 }
 .fa-solid {
@@ -76,9 +73,56 @@ export interface IconWrapperProps {
   borderRadius?: string;
   sideLength?: string;
   transition?: string;
+  backgroundColor?: string;
 }
 
 export const StyledIconWrapper = styled.div<IconWrapperProps>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: ${({ borderRadius }) => {
+    if (borderRadius) {
+      return borderRadius;
+    }
+    return "var(--border--radius)";
+  }};
+
+  ${({ sideLength }) => {
+    if (sideLength) {
+      return `
+      min-width: ${sideLength};
+      width: ${sideLength};
+      height: ${sideLength};
+    `;
+    }
+    return `
+      min-width: 2.25em;
+      width: 2.25em;
+      height: 2.25em;
+    `;
+  }};
+
+  background-color: ${({ backgroundColor }) => {
+    if (backgroundColor) {
+      return backgroundColor;
+    }
+    return "var(--color--icon)";
+  }};
+
+  transition: ${({ transition }) => {
+    if (transition) {
+      return transition;
+    }
+    return "0.3s";
+  }};
+  cursor: pointer;
+  &:hover {
+    background-color: var(--color--icon--hover);
+  }
+`;
+
+export const StyledIconLink = styled.a<IconWrapperProps>`
+  color: var(--color--white);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -131,7 +175,9 @@ export const StyledSearchResultItemWrapper = styled.div`
   align-items: center;
 `;
 
-export const StyledSearchResultItem = styled.div`
+export const StyledSearchResultItem = styled.a`
+  color: var(--color--white);
+  text-decoration: none;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -186,3 +232,23 @@ export const StyledUserInfoItemWrapper = styled.div`
   background: var(--color--header);
   max-width: 24em;
 `;
+
+export const StyledAddButton = styled.span`
+  cursor: pointer;
+  font-size: 0.75em;
+  text-align: center;
+  user-select: none;
+  background: var(--color--titleBar);
+  display: block;
+  border-radius: var(--border--radius);
+  margin: 0.5em 0;
+  transition: 0.25s;
+  padding: 0.5em;
+  &:hover {
+    background-color: var(--color--icon);
+  }
+`;
+
+export const CONTENTS_WIDTH = "21.25em";
+
+export const HEADER_HEIGHT = "3.375em";

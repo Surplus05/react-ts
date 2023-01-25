@@ -4,6 +4,7 @@ import GlobalStyle from "./common/style";
 import Body from "./components/body/Body";
 import Main from "./components/body/Main";
 import SearchResult from "./components/body/SearchResult";
+import Watch from "./components/body/watch/Watch";
 import { PlatformProvider } from "./components/context/PlatformContext";
 import Header from "./components/header/Header";
 import User from "./components/user/User";
@@ -21,6 +22,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Body />}>
             <Route path="/" element={<Main />}></Route>
+            <Route path="/watch" element={<Watch />}></Route>
             <Route path="/result" element={<SearchResult />}></Route>
             <Route path="/user" element={<User />}></Route>
           </Route>

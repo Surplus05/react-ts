@@ -1,27 +1,13 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import { StyledAddButton } from "../../common/style";
 import usePlaylist, { Playlist } from "../hooks/usePlaylist";
 
-const StyledAddButton = styled.span`
-  cursor: pointer;
-  font-size: 0.75em;
-  text-align: center;
-  user-select: none;
-  background: var(--color--titleBar);
-  display: block;
-  border-radius: var(--border--radius);
-  margin: 0.5em 0;
-  transition: 0.25s;
-  padding: 0.5em;
-  &:hover {
-    background-color: var(--color--icon);
-  }
-`;
-
 const PlaylistButton = ({
+  channelId,
   videoId,
   title,
 }: {
+  channelId: string;
   videoId: string;
   title: string;
 }) => {
@@ -43,7 +29,7 @@ const PlaylistButton = ({
   }, [videoId, isInPlaylist, playlist]);
 
   function onClickAddBtn() {
-    addPlaylist(videoId, title);
+    addPlaylist(channelId, videoId, title);
     setIsInPlaylist(true);
   }
   function onClickDelBtn() {

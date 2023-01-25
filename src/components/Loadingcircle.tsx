@@ -16,7 +16,7 @@ const StyledLoadingCircle = styled.div`
   background-color: transparent;
   border-radius: 50%;
   border: 6px solid transparent;
-  border-top: 6px solid var(--primary--loading-circle-color);
+  border-top: 6px solid var(--color--loadingCircle);
   width: 2.25em;
   height: 2.25em;
   animation: ${circleRotate} 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;

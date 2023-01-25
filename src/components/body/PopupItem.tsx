@@ -61,7 +61,7 @@ const PopupItem = ({
   setPopupItemCompoent: Dispatch<SetStateAction<JSX.Element | null>>;
 }) => {
   const PopupItemRef = React.useRef<HTMLDivElement>(null);
-  let [itemPerPage, fontSize, , width, height] = useContentsSizes();
+  let [itemPerPage, fontSize, , width] = useContentsSizes();
   let videoAreaHeight: number;
   let videoAreaWidth: number;
   let descriptionHeight: number;
@@ -70,6 +70,7 @@ const PopupItem = ({
   let totalHeight: number;
   let title = getTitle(item);
   let videoId = getVideoId(item);
+  let channelId = item.snippet.channelId;
 
   totalWidth = width * itemPerPage + 8 * (itemPerPage - 1);
   if (itemPerPage > 3) {
@@ -157,6 +158,7 @@ const PopupItem = ({
         >
           <VideoDetail
             fontSize={fontSize}
+            channelId={channelId}
             videoId={videoId}
             videoSnippet={item.snippet}
           ></VideoDetail>

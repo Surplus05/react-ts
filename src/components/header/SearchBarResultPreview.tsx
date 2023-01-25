@@ -5,13 +5,7 @@ import {
   StyledSearchResultItemWrapper,
 } from "../../common/style";
 
-const SearchBarResultPreview = ({
-  onClickPreview,
-  data,
-}: {
-  onClickPreview: Function;
-  data: Array<Object>;
-}) => {
+const SearchBarResultPreview = ({ data }: { data: Array<Object> }) => {
   if (data == null) return <></>;
   return (
     <>
@@ -20,11 +14,7 @@ const SearchBarResultPreview = ({
 
         return (
           <StyledSearchResultItemWrapper key={item.id.videoId}>
-            <StyledSearchResultItem
-              onClick={() => {
-                onClickPreview(query);
-              }}
-            >
+            <StyledSearchResultItem href={`/result?q=${query}`}>
               <i className="fa-solid fa-magnifying-glass" />
               <span
                 style={{

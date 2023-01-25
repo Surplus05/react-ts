@@ -7,11 +7,9 @@ import {
 } from "../../common/style";
 
 const SearchBarResultHistory = ({
-  onClickHistory,
   onClickRemove,
   history,
 }: {
-  onClickHistory: Function;
   onClickRemove: Function;
   history: Array<String>;
 }) => {
@@ -24,12 +22,10 @@ const SearchBarResultHistory = ({
         return (
           <StyledSearchResultItemWrapper key={query}>
             <StyledSearchResultItem
+              href={`/result?q=${query}`}
               style={{
                 width: "100%",
                 marginRight: "0.375em",
-              }}
-              onClick={() => {
-                onClickHistory(query);
               }}
             >
               <i className="fa-solid fa-clock-rotate-left" />
