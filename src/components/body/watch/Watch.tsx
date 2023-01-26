@@ -36,8 +36,6 @@ const Watch = () => {
     videoAreaHeight = (context.innerWidth * 9) / 16 + 12;
   }
 
-  useEffect(() => {}, [channelId, requestData]);
-
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://www.youtube.com/iframe_api";

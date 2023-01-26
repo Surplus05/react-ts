@@ -1,4 +1,4 @@
-import React from "react";
+import React, { BaseSyntheticEvent } from "react";
 import styled from "styled-components";
 
 interface ChatWrapperProps {
@@ -16,6 +16,43 @@ const StyledChatWrapper = styled.div<ChatWrapperProps>`
     if (videoAreaHeight !== -1)
       return `calc(100vh - ${videoAreaHeight + 54 + 96}px)`;
   }};
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const StyledChatBar = styled.div`
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: var(--border--radius);
+  background-color: var(--color--header--background);
+  width: inherit;
+  margin: 0;
+`;
+
+const StyledChatAreaWrapper = styled.div`
+  margin: 0.75em;
+`;
+
+const StyleChatUid = styled.span`
+  display: inline-block;
+  background-color: var(--color--black);
+  border-radius: var(--border--radius);
+  padding: 0.25em 0.75em;
+  user-select: none;
+`;
+
+const StyledChatSendButton = styled.button`
+  font-family: "KoPubWorldDotum";
+  color: var(--color--white);
+  cursor: pointer;
+  padding: 0 1.125em;
+  font-weight: bold;
+  background-color: var(--color--main);
+  border-radius: var(--border--radius);
+  :hover {
+    background-color: var(--color--main--hover);
+  }
 `;
 
 const Chat = ({
@@ -25,9 +62,65 @@ const Chat = ({
   isRow: boolean;
   videoAreaHeight: number;
 }) => {
+  let uid = localStorage.getItem("uid");
+  function getFocus(e: BaseSyntheticEvent): void {
+    if (e.target.parentNode.classList.contains("si")) {
+      e.target.parentNode.classList.add("si-focusIn");
+      e.target.parentNode.classList.remove("si-focusOut");
+    } else {
+      throw new Error("unknown parent");
+    }
+  }
+
+  const lostFocus = (e: BaseSyntheticEvent): void => {
+    if (e.target.parentNode.classList.contains("si")) {
+      e.target.parentNode.classList.add("si-focusOut");
+      e.target.parentNode.classList.remove("si-focusIn");
+    } else {
+      throw new Error("unknown parent");
+    }
+  };
+
   return (
     <StyledChatWrapper videoAreaHeight={videoAreaHeight} isRow={isRow}>
-      Chatting Box
+      <div>Chatting Box</div>
+      <StyledChatAreaWrapper>
+        <div>
+          <StyledChatBar className="si si-focusOut">
+            <input
+              placeholder="메시지 보내기"
+              style={{
+                fontFamily: "KoPubWorldDotum",
+                userSelect: "none",
+                boxSizing: "border-box",
+                color: "#fff",
+                background: "transparent",
+                outline: "none",
+                border: "none",
+                float: "left",
+                width: "100%",
+                height: "32.8px",
+                padding: "0 6px",
+                margin: "0",
+              }}
+              type="text"
+              onFocus={getFocus}
+              onBlur={lostFocus}
+            />
+          </StyledChatBar>
+        </div>
+        <div
+          style={{
+            marginTop: "0.75em",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <StyleChatUid>{"ID : " + uid}</StyleChatUid>
+          <StyledChatSendButton>전송</StyledChatSendButton>
+        </div>
+      </StyledChatAreaWrapper>
     </StyledChatWrapper>
   );
 };

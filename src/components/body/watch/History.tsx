@@ -1,6 +1,7 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import { StyledIconWrapper } from "../../../common/style";
+import WatchHistoryItem from "./WatchHistoryItem";
 
 interface HistoryWrapperProps {
   isExpand: boolean;
@@ -30,6 +31,18 @@ const StyledHistoryIconWrapper = styled.div`
   padding: 0.75em;
 `;
 
+const StyledHistoryItemWrapper = styled.div`
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 14.75em;
+  margin-right: 0.25em;
+  height: auto;
+
+  overflow-y: scroll;
+  overflow-x: hidden;
+`;
+
 const History = ({
   innerWidth,
   isExpand,
@@ -39,7 +52,15 @@ const History = ({
   isExpand: boolean;
   setIsExpand: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
+  let [watchHistory, setWatchHistory] = useState<any>(null);
+
+  useEffect(() => {
+    let watchHistoryLocal = localStorage.getItem("watchHistory");
+    if (watchHistoryLocal != null)
+      setWatchHistory(JSON.parse(watchHistoryLocal));
+  }, []);
   if (innerWidth <= 500) return <></>;
+
   return (
     <StyledHistoryWrapper isExpand={isExpand}>
       {innerWidth >= 1280 && (
@@ -79,6 +100,24 @@ const History = ({
           <i className="fa-solid fa-clock-rotate-left" />
         </StyledHistoryIconWrapper>
       )}
+      <StyledHistoryItemWrapper
+        className="scroll"
+        style={{
+          maxHeight: isExpand ? "calc(100vh - 106px)" : "calc(100vh - 158px)",
+        }}
+      >
+        {!watchHistory && <span>기록이 존재하지 않습니다</span>}
+        {watchHistory &&
+          watchHistory.map((history: any) => {
+            return (
+              <WatchHistoryItem
+                key={history.videoId}
+                isExpand={isExpand}
+                history={history}
+              ></WatchHistoryItem>
+            );
+          })}
+      </StyledHistoryItemWrapper>
     </StyledHistoryWrapper>
   );
 };

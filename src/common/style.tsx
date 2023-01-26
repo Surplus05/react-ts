@@ -14,7 +14,8 @@ const GlobalStyle = createGlobalStyle`
   --color--search--background: rgb(50, 50, 50);
   --color--header--background: rgb(16,16,16);
   --color--header--background--hover: rgba(255, 255, 255, 0.25);
-  --color--main: #ee7272;
+  --color--main: #9E9DFF;
+  --color--main--hover: #8685EF;
   --color--loadingCircle:rgba(128,128,128,1);
 
   --border--radius: 0.375em;

@@ -26,9 +26,8 @@ const StyledChannelTitleWrapper = styled.div`
 `;
 
 const StyledChannelImg = styled.img`
-  height: calc(100% - 2em);
-  max-width: 4em;
-  min-width: 2em;
+  height: 4em;
+  width: 4em;
   border-radius: 50%;
   margin: 1em;
 `;
