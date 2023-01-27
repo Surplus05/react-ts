@@ -1,5 +1,7 @@
-import React, { BaseSyntheticEvent } from "react";
+import React, { BaseSyntheticEvent, useRef } from "react";
 import styled from "styled-components";
+import useFirebase from "../../hooks/useFirebase";
+import ChatBox from "./ChatBox";
 
 interface ChatWrapperProps {
   isRow: boolean;
@@ -56,13 +58,31 @@ const StyledChatSendButton = styled.button`
 `;
 
 const Chat = ({
+  videoId,
   isRow,
   videoAreaHeight,
+  getCurrentTime,
 }: {
+  videoId: string;
   isRow: boolean;
   videoAreaHeight: number;
+  getCurrentTime: () => number;
 }) => {
-  let uid = localStorage.getItem("uid");
+  let uid = localStorage.getItem("uid")?.toLocaleUpperCase() as string;
+  let inputRef = useRef<HTMLInputElement>(null);
+  const [, , sendChatData] = useFirebase();
+
+  function sendChat() {
+    let currentTime: number = getCurrentTime();
+    if (currentTime !== 0 && inputRef.current?.value !== "")
+      sendChatData(videoId, {
+        publishedAt: currentTime,
+        uid,
+        text: inputRef.current!.value,
+      });
+    inputRef.current!.value = "";
+  }
+
   function getFocus(e: BaseSyntheticEvent): void {
     if (e.target.parentNode.classList.contains("si")) {
       e.target.parentNode.classList.add("si-focusIn");
@@ -83,11 +103,12 @@ const Chat = ({
 
   return (
     <StyledChatWrapper videoAreaHeight={videoAreaHeight} isRow={isRow}>
-      <div>Chatting Box</div>
+      <ChatBox videoId={videoId}></ChatBox>
       <StyledChatAreaWrapper>
         <div>
           <StyledChatBar className="si si-focusOut">
             <input
+              ref={inputRef}
               placeholder="메시지 보내기"
               style={{
                 fontFamily: "KoPubWorldDotum",
@@ -118,7 +139,7 @@ const Chat = ({
           }}
         >
           <StyleChatUid>{"ID : " + uid}</StyleChatUid>
-          <StyledChatSendButton>전송</StyledChatSendButton>
+          <StyledChatSendButton onClick={sendChat}>전송</StyledChatSendButton>
         </div>
       </StyledChatAreaWrapper>
     </StyledChatWrapper>

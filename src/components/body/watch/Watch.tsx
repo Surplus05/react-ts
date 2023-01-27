@@ -79,6 +79,11 @@ const Watch = () => {
     });
   }
 
+  function getCurrentTime(): number {
+    if (player.current) return player.current.getCurrentTime();
+    else return -1;
+  }
+
   return (
     <StyledWatchWrapper>
       <History
@@ -87,6 +92,8 @@ const Watch = () => {
         setIsExpand={setIsExpand}
       ></History>
       <Video
+        getCurrentTime={getCurrentTime}
+        videoId={videoId}
         videoAreaHeight={videoAreaHeight}
         channelData={data}
         isRow={isRow}

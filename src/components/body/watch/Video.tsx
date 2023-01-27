@@ -38,13 +38,17 @@ const StyledVideo = styled.div`
 `;
 
 const Video = ({
+  videoId,
   isRow,
   videoAreaHeight,
   channelData,
+  getCurrentTime,
 }: {
+  videoId: string;
   isRow: boolean;
   videoAreaHeight: number;
   channelData: string[];
+  getCurrentTime: () => number;
 }) => {
   return (
     <StyledVideoWrapper isRow={isRow}>
@@ -52,7 +56,12 @@ const Video = ({
         <StyledVideo id="player"></StyledVideo>
         <ChannelInfo channelData={channelData}></ChannelInfo>
       </StyledVideoArea>
-      <Chat videoAreaHeight={videoAreaHeight} isRow={isRow}></Chat>
+      <Chat
+        videoId={videoId}
+        videoAreaHeight={videoAreaHeight}
+        isRow={isRow}
+        getCurrentTime={getCurrentTime}
+      ></Chat>
     </StyledVideoWrapper>
   );
 };

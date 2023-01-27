@@ -26,3 +26,9 @@ export function getVideoId(item: any): string {
   if (item.id.videoId != null) result = item.id.videoId;
   return result;
 }
+
+export function processTime(currentTime: number) {
+  let minutes = Math.floor(currentTime / 60);
+  let seconds = currentTime - minutes * 60;
+  return `${minutes}M${seconds}s`.replace(".", "");
+}
