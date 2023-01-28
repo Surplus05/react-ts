@@ -1,6 +1,8 @@
-import React, { BaseSyntheticEvent, useRef } from "react";
+import { ref, runTransaction } from "firebase/database";
+import React, { BaseSyntheticEvent, useEffect, useRef } from "react";
 import styled from "styled-components";
 import useFirebase from "../../hooks/useFirebase";
+import { db } from "../../service/Firebase";
 import ChatBox from "./ChatBox";
 
 interface ChatWrapperProps {
@@ -74,13 +76,19 @@ const Chat = ({
 
   function sendChat() {
     let currentTime: number = getCurrentTime();
-    if (currentTime !== 0 && inputRef.current?.value !== "")
+    if (inputRef.current?.value !== "")
       sendChatData(videoId, {
-        publishedAt: currentTime,
+        currentTime,
         uid,
         text: inputRef.current!.value,
       });
     inputRef.current!.value = "";
+  }
+
+  function onInputKeyUp(e: React.KeyboardEvent): void {
+    if (e.key === "Enter") {
+      sendChat();
+    }
   }
 
   function getFocus(e: BaseSyntheticEvent): void {
@@ -103,7 +111,18 @@ const Chat = ({
 
   return (
     <StyledChatWrapper videoAreaHeight={videoAreaHeight} isRow={isRow}>
-      <ChatBox videoId={videoId}></ChatBox>
+      <div
+        style={{
+          width: "calc(100% )",
+          height: "2.25em",
+          textAlign: "center",
+        }}
+      >
+        <span style={{ lineHeight: "2.25em", userSelect: "none" }}>
+          동영상 채팅
+        </span>
+      </div>
+      <ChatBox videoId={videoId} getCurrentTime={getCurrentTime}></ChatBox>
       <StyledChatAreaWrapper>
         <div>
           <StyledChatBar className="si si-focusOut">
@@ -127,6 +146,7 @@ const Chat = ({
               type="text"
               onFocus={getFocus}
               onBlur={lostFocus}
+              onKeyUp={onInputKeyUp}
             />
           </StyledChatBar>
         </div>

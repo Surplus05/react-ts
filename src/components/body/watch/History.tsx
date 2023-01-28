@@ -71,6 +71,7 @@ const History = ({
                 lineHeight: "36px",
                 textAlign: "center",
                 display: "inline-block",
+                userSelect: "none",
               }}
             >
               같이보기 기록
