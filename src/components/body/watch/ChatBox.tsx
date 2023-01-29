@@ -33,6 +33,7 @@ const ChatBox = ({
   const [update, setUpdate] = useState<boolean>(false);
   const chatData = useRef<Array<any>>([]);
   const previusTime = useRef<number>(0);
+  const preventDuplicate = useRef<boolean>(false);
   const interval = useRef<any>();
 
   useEffect(() => {
@@ -46,8 +47,10 @@ const ChatBox = ({
       }
       interval.current = setInterval(() => {
         let currentTime = getCurrentTime();
-        if (previusTime.current === currentTime) return;
-
+        if (previusTime.current === currentTime) {
+          if (preventDuplicate.current) return;
+          preventDuplicate.current = true;
+        }
         if (previusTime.current > currentTime) {
           chatData.current = [];
           previusTime.current = 0;
@@ -66,7 +69,7 @@ const ChatBox = ({
             previusTime.current = currentTime;
           }
         );
-      }, 1000); // chat 가져올 interval
+      }, 500); // chat 가져올 interval
     }
     return () => {
       if (interval.current) {
@@ -88,7 +91,7 @@ const ChatBox = ({
     <StyledChatBoxWrapper isRow={isRow} className="scroll">
       {chatData.current.length > 0 &&
         chatData.current.map((chat: any) => {
-          return <Chatting chat={chat}></Chatting>;
+          return <Chatting key={chat.currentTime} chat={chat}></Chatting>;
         })}
     </StyledChatBoxWrapper>
   );
