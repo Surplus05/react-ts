@@ -10,12 +10,10 @@ import {
   startAt,
   endAt,
   limitToLast,
-  orderByValue,
-  runTransaction,
 } from "firebase/database";
 import { db } from "../service/Firebase";
 
-type ChatItem = {
+export type ChatItem = {
   currentTime: number;
   uid: string;
   text: string;
@@ -40,8 +38,8 @@ export default function useFirebase(): [
           return snapshot.val();
         } else {
           set(ref(db, `videos/${videoId}`), {
-            metaData: { chatCount: 0 },
-            chats: ["Hello World!"],
+            metaData: { currentUsers: 0 },
+            chats: "",
           });
         }
       })
@@ -57,10 +55,10 @@ export default function useFirebase(): [
     const videoRef = ref(db, `videos/${videoId}/chats`);
     const q = query(
       videoRef,
-      orderByChild("currentTime"),
       startAt(previusTime),
       endAt(currentTime),
-      limitToLast(100)
+      limitToLast(100),
+      orderByChild("currentTime")
     );
     return get(q);
   }
@@ -73,27 +71,14 @@ export default function useFirebase(): [
       text,
     }: { currentTime: number; uid: string; text: string }
   ) {
-    // const chatRef = ref(db, `videos/${videoId}/chats`);
-    // const newChatRef = push(chatRef);
-    // const chatData: ChatItem = {
-    //   currentTime,
-    //   uid,
-    //   text,
-    // };
-    // set(newChatRef, chatData);
-    const chatRef = ref(db, `videos/${videoId}/`);
+    const chatRef = ref(db, `videos/${videoId}/chats`);
+    const newChatRef = push(chatRef);
     const chatData: ChatItem = {
       currentTime,
       uid,
       text,
     };
-    runTransaction(chatRef, (chat) => {
-      if (chat) {
-        chat.chats[`${chat.metaData.chatCount}`] = chatData;
-        chat.metaData["chatCount"]++;
-      }
-      return chat;
-    });
+    set(newChatRef, chatData);
   }
 
   return [checkChatData, getChatData, sendChatData];

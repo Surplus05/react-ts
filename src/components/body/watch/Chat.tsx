@@ -122,7 +122,11 @@ const Chat = ({
           동영상 채팅
         </span>
       </div>
-      <ChatBox videoId={videoId} getCurrentTime={getCurrentTime}></ChatBox>
+      <ChatBox
+        videoId={videoId}
+        getCurrentTime={getCurrentTime}
+        isRow={isRow}
+      ></ChatBox>
       <StyledChatAreaWrapper>
         <div>
           <StyledChatBar className="si si-focusOut">

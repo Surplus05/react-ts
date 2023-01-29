@@ -28,7 +28,15 @@ export function getVideoId(item: any): string {
 }
 
 export function processTime(currentTime: number) {
-  let minutes = Math.floor(currentTime / 60);
-  let seconds = currentTime - minutes * 60;
-  return `${minutes}M${seconds}s`.replace(".", "");
+  let hours = Math.floor(currentTime / 3600);
+  let minutes = Math.floor(currentTime / 60 - hours * 3600);
+  let seconds = Math.floor(currentTime - hours * 3600 - minutes * 60);
+  if (hours > 0)
+    return `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+  else
+    return `${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}`;
 }
