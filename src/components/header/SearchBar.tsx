@@ -103,11 +103,10 @@ const SearchBar = ({
         wrapperRef.current.classList.remove("hidden");
         resultRef.current.classList.add("sr-focusOut");
       }
-      if (context.platform === "MOBILE") {
-        resultRef.current.classList.remove("sr-focusOut");
-      }
     }
   }, [resultRef, wrapperRef, context.platform]);
+
+  useOutsideDetector(wrapperRef, resultRef, context.platform);
 
   const hideSearchBarResult = () => {
     if (resultRef.current && context.platform === "DESKTOP") {
@@ -221,12 +220,10 @@ const SearchBar = ({
         return value === q;
       });
     if (idx === -1) throw new Error(`unknown searchHistory Error ${q}`);
-    if (history.length === 1 && data.length < 0) hideSearchBarResult();
+    if (history.length === 1 && data.length === 0) hideSearchBarResult();
     removeHistory(q);
     setHistory(JSON.parse(localStorage.getItem("searchHistory") as string));
   };
-
-  useOutsideDetector(wrapperRef, resultRef, context.platform);
 
   return (
     <StyledSearchBarWrapper

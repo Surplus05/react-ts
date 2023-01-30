@@ -11,14 +11,18 @@ export default function useOutsideDetector(
         !wrapperRef.current?.contains(event.target) &&
         platform === "DESKTOP"
       ) {
-        targetRef.current?.classList.add("sr-focusOut");
+        if (event.target.getAttribute("data-type") !== "removeButton")
+          targetRef.current?.classList.add("sr-focusOut");
       }
 
       if (
         !wrapperRef.current?.contains(event.target) &&
         platform === "MOBILE"
       ) {
-        if (!event.target.classList.contains("toggleBtn"))
+        if (
+          !event.target.classList.contains("toggleBtn") &&
+          event.target.getAttribute("data-type") !== "removeButton"
+        )
           wrapperRef.current?.classList.add("hidden");
       }
     }

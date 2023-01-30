@@ -40,6 +40,7 @@ const SearchBarResultHistory = ({
               </span>
             </StyledSearchResultItem>
             <StyledIconWrapper
+              data-type="removeButton"
               sideLength="1.75em"
               transition="0"
               onClick={() => {
@@ -47,6 +48,7 @@ const SearchBarResultHistory = ({
               }}
             >
               <i
+                data-type="removeButton"
                 style={{
                   lineHeight: "1.875em",
                 }}
