@@ -18,13 +18,7 @@ const PlaylistButton = ({
   useEffect(() => {
     if (playlist != null) {
       const temp: Array<Playlist> = JSON.parse(playlist);
-      const idx = temp.findIndex((value) => {
-        return value.videoId === videoId;
-      });
-      if (idx >= 0) setIsInPlaylist(true);
-      else {
-        setIsInPlaylist(false);
-      }
+      setIsInPlaylist(temp.some((item) => item.videoId === videoId));
     }
   }, [videoId, isInPlaylist, playlist]);
 

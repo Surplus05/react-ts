@@ -62,14 +62,8 @@ const Watch = () => {
   }, [videoId]);
 
   useEffect(() => {
-    if (context.innerWidth >= 1280) {
-      setIsExpand(true);
-    } else {
-      setIsExpand(false);
-    }
-
-    if (context.innerWidth >= 748) setIsRow(true);
-    else setIsRow(false);
+    setIsExpand(context.innerWidth >= 1280);
+    setIsRow(context.innerWidth >= 748);
   }, [context.innerWidth]);
 
   function onPlayerReady(event: any): void {

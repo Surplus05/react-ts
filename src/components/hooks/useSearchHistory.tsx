@@ -3,32 +3,27 @@ export default function useSearchHistory(): [
   (query: string) => void
 ] {
   function addHistory(query: string) {
-    const history: string | null = localStorage.getItem("searchHistory");
-
-    if (history != null) {
-      const temp: Array<String> = JSON.parse(history);
-      const idx = temp.findIndex((value) => {
-        return value === query;
-      });
-      if (idx !== -1) temp.splice(idx, 1);
-      temp.splice(0, 0, query);
-      localStorage.setItem("searchHistory", JSON.stringify(temp));
-    } else {
-      localStorage.setItem("searchHistory", JSON.stringify([query]));
-    }
+    const history: Array<String> = JSON.parse(
+      localStorage.getItem("searchHistory") || "[]"
+    );
+    const idx = history.findIndex((value) => {
+      return value === query;
+    });
+    if (idx !== -1) history.splice(idx, 1);
+    history.splice(0, 0, query);
+    localStorage.setItem("searchHistory", JSON.stringify(history));
   }
 
   function removeHistory(query: string) {
-    const history: string | null = localStorage.getItem("searchHistory");
-    if (history != null) {
-      const temp: Array<String> = JSON.parse(history);
-      const idx = temp.findIndex((value) => {
-        return value === query;
-      });
-      if (idx !== -1) {
-        temp.splice(idx, 1);
-      }
-      localStorage.setItem("searchHistory", JSON.stringify(temp));
+    const history: Array<string> = JSON.parse(
+      localStorage.getItem("searchHistory") || "[]"
+    );
+    const idx = history.findIndex((value) => {
+      return value === query;
+    });
+    if (idx !== -1) {
+      history.splice(idx, 1);
+      localStorage.setItem("searchHistory", JSON.stringify(history));
     } else {
       throw new Error(`unknown searchHistory Error ${query}`);
     }

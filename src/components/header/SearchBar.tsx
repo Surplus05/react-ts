@@ -141,9 +141,9 @@ const SearchBar = ({
   };
 
   const getFocus = (e: BaseSyntheticEvent): void => {
-    if (e.target.parentNode.classList.contains("si")) {
-      e.target.parentNode.classList.add("si-focusIn");
-      e.target.parentNode.classList.remove("si-focusOut");
+    const parent = e.target.parentNode;
+    if (parent.classList.contains("si")) {
+      parent.classList.replace("si-focusOut", "si-focusIn");
       if (resultRef.current && wrapperRef.current && inputRef.current) {
         if (data.length + history.length > 0) {
           resultRef.current.classList.remove("sr-focusOut");
@@ -155,9 +155,9 @@ const SearchBar = ({
   };
 
   const lostFocus = (e: BaseSyntheticEvent): void => {
-    if (e.target.parentNode.classList.contains("si")) {
-      e.target.parentNode.classList.add("si-focusOut");
-      e.target.parentNode.classList.remove("si-focusIn");
+    const parent = e.target.parentNode;
+    if (parent.classList.contains("si")) {
+      parent.classList.replace("si-focusIn", "si-focusOut");
     } else {
       throw new Error("unknown parent");
     }
@@ -175,18 +175,9 @@ const SearchBar = ({
 
   const searchRequest = (e: any) => {
     if (inputRef.current) {
-      switch (e.type) {
-        case "click": {
-          if (inputRef.current.value) {
-            pageMove(inputRef.current.value);
-          }
-          break;
-        }
-        case "keyup": {
-          if (e.code === "Enter" && inputRef.current.value) {
-            pageMove(inputRef.current.value);
-          }
-          break;
+      if (inputRef.current.value) {
+        if (e.type === "click" || (e.type === "keyup" && e.code === "Enter")) {
+          pageMove(inputRef.current.value);
         }
       }
     }
@@ -214,15 +205,13 @@ const SearchBar = ({
   };
 
   const onClickRemove = (q: string) => {
-    let idx = -1;
-    if (history != null)
-      idx = history.findIndex((value) => {
-        return value === q;
-      });
-    if (idx === -1) throw new Error(`unknown searchHistory Error ${q}`);
-    if (history.length === 1 && data.length === 0) hideSearchBarResult();
-    removeHistory(q);
-    setHistory(JSON.parse(localStorage.getItem("searchHistory") as string));
+    if (history.some((value) => value === q)) {
+      if (history.length === 1 && data.length === 0) hideSearchBarResult();
+      removeHistory(q);
+      setHistory(JSON.parse(localStorage.getItem("searchHistory") as string));
+    } else {
+      throw new Error(`unknown searchHistory Error ${q}`);
+    }
   };
 
   return (

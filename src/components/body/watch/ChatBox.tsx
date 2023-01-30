@@ -56,8 +56,7 @@ const ChatBox = ({
         if (previousTime.current === currentTime) {
           if (preventDuplicate.current) return;
           preventDuplicate.current = true;
-        }
-        if (previousTime.current > currentTime) {
+        } else if (previousTime.current > currentTime) {
           chatData.current = [];
           previousTime.current = 0;
         }
@@ -82,11 +81,10 @@ const ChatBox = ({
   }, [update]);
 
   function pushToState(data: Object) {
-    if (chatData.current.length === 100) {
-      chatData.current = [...chatData.current.slice(1), data];
-    } else {
-      chatData.current = [...chatData.current, data];
-    }
+    chatData.current =
+      chatData.current.length === 100
+        ? [...chatData.current.slice(1), data]
+        : [...chatData.current, data];
     setUpdate(!update);
   }
 

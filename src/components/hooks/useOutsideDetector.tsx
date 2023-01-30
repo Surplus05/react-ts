@@ -7,23 +7,22 @@ export default function useOutsideDetector(
 ) {
   useEffect(() => {
     function handleClickOutside(event: any) {
-      if (
-        !wrapperRef.current?.contains(event.target) &&
-        platform === "DESKTOP"
-      ) {
-        if (event.target.getAttribute("data-type") !== "removeButton")
-          targetRef.current?.classList.add("sr-focusOut");
-      }
-
-      if (
-        !wrapperRef.current?.contains(event.target) &&
-        platform === "MOBILE"
-      ) {
+      const wrapper = wrapperRef.current;
+      const target = targetRef.current;
+      if (!wrapper || !target) return;
+      if (platform === "DESKTOP") {
         if (
+          !wrapper.contains(event.target) &&
+          event.target.getAttribute("data-type") !== "removeButton"
+        )
+          target.classList.add("sr-focusOut");
+      } else if (platform === "MOBILE") {
+        if (
+          !wrapper.contains(event.target) &&
           !event.target.classList.contains("toggleBtn") &&
           event.target.getAttribute("data-type") !== "removeButton"
         )
-          wrapperRef.current?.classList.add("hidden");
+          wrapper.classList.add("hidden");
       }
     }
     document.addEventListener("click", handleClickOutside);

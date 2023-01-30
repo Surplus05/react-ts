@@ -53,6 +53,9 @@ const StyledPopupItemTitle = styled.span`
   text-overflow: ellipsis;
 `;
 
+const ASPECT_RATIO = 16 / 9;
+const HEIGHT_OFFSET = 52;
+
 const PopupItem = ({
   item,
   setPopupItemCompoent,
@@ -75,16 +78,16 @@ const PopupItem = ({
   totalWidth = width * itemPerPage + 8 * (itemPerPage - 1);
   if (itemPerPage > 3) {
     totalHeight = width * (itemPerPage / 2);
-    videoAreaHeight = totalHeight - 52;
-    videoAreaWidth = (videoAreaHeight * 16) / 9;
+    videoAreaHeight = totalHeight - HEIGHT_OFFSET;
+    videoAreaWidth = videoAreaHeight * ASPECT_RATIO;
     descriptionWidth = totalWidth - videoAreaWidth - 6;
     descriptionHeight = videoAreaHeight;
   } else {
     totalHeight = width * 3;
-    videoAreaWidth = width * itemPerPage + 8 * (itemPerPage - 1);
-    videoAreaHeight = (videoAreaWidth * 9) / 16;
+    videoAreaWidth = totalWidth;
+    videoAreaHeight = videoAreaWidth / ASPECT_RATIO;
     descriptionWidth = videoAreaWidth;
-    descriptionHeight = totalHeight - videoAreaHeight - 52;
+    descriptionHeight = totalHeight - videoAreaHeight - HEIGHT_OFFSET;
   }
 
   useEffect(() => {

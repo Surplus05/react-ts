@@ -74,13 +74,15 @@ const Chat = ({
 
   function sendChat() {
     let currentTime: number = getCurrentTime();
-    if (inputRef.current?.value !== "")
+    const inputValue = inputRef.current?.value;
+    if (inputValue) {
       sendChatData(videoId, {
         currentTime,
         uid,
-        text: inputRef.current!.value,
+        text: inputValue,
       });
-    inputRef.current!.value = "";
+      inputRef.current!.value = "";
+    }
   }
 
   function onInputKeyUp(e: React.KeyboardEvent): void {
@@ -90,21 +92,20 @@ const Chat = ({
   }
 
   function getFocus(e: BaseSyntheticEvent): void {
-    if (e.target.parentNode.classList.contains("si")) {
-      e.target.parentNode.classList.add("si-focusIn");
-      e.target.parentNode.classList.remove("si-focusOut");
-    } else {
+    const parentNode = e.target.parentNode;
+    if (!parentNode.classList.contains("si")) {
       throw new Error("unknown parent");
     }
+
+    parentNode.classList.replace("si-focusOut", "si-focusIn");
   }
 
   const lostFocus = (e: BaseSyntheticEvent): void => {
-    if (e.target.parentNode.classList.contains("si")) {
-      e.target.parentNode.classList.add("si-focusOut");
-      e.target.parentNode.classList.remove("si-focusIn");
-    } else {
+    const parentNode = e.target.parentNode;
+    if (!parentNode.classList.contains("si")) {
       throw new Error("unknown parent");
     }
+    parentNode.classList.replace("si-focusIn", "si-focusOut");
   };
 
   return (

@@ -78,10 +78,10 @@ const List = ({
   }, [query]);
 
   useEffect(() => {
-    let innerWidth = context.innerWidth > 1440 ? 1440 : context.innerWidth;
+    const innerWidth = Math.min(context.innerWidth, 1440);
     if (wrapperRef.current) {
-      let listWidth = (width + 8) * MAXIMUM_ITEM_PER_LIST;
-      maxWidth.current = -listWidth + innerWidth;
+      const listWidth = (width + 8) * MAXIMUM_ITEM_PER_LIST;
+      maxWidth.current = innerWidth - listWidth;
       if (context.innerWidth <= 1440) maxWidth.current -= 8;
       translatePrev.current = Number(
         wrapperRef.current.style.transform.replaceAll(/[^0-9,^-]/g, "")
@@ -121,18 +121,14 @@ const List = ({
     e.preventDefault();
     if (e.target) preventHover(e.target);
     if (wrapperRef.current) {
-      switch (e.type) {
-        case "mousedown": {
-          startX = (e as MouseEvent).screenX;
-          break;
-        }
-        case "touchstart": {
-          startX = (e as TouchEvent).targetTouches[0].screenX;
-          break;
-        }
-        default:
-          throw new Error("Unknown Event Type");
+      if (e.type === "mousedown") {
+        startX = (e as MouseEvent).screenX;
+      } else if (e.type === "touchstart") {
+        startX = (e as TouchEvent).targetTouches[0].screenX;
+      } else {
+        throw new Error("Unknown Event Type");
       }
+
       wrapperRef.current.addEventListener("mousemove", onDragMove);
       wrapperRef.current.addEventListener("touchmove", onDragMove);
       wrapperRef.current.addEventListener("mouseleave", onDragEnd);
@@ -145,15 +141,12 @@ const List = ({
     if (!isDraggingRef.current) {
       isDraggingRef.current = true;
     }
-    switch (e.type) {
-      case "mousemove": {
-        endX = (e as MouseEvent).screenX;
-        break;
-      }
-      case "touchmove": {
-        endX = (e as TouchEvent).targetTouches[0].screenX;
-        break;
-      }
+    if (e.type === "mousemove") {
+      endX = (e as MouseEvent).screenX;
+    } else if (e.type === "touchmove") {
+      endX = (e as TouchEvent).targetTouches[0].screenX;
+    } else {
+      throw new Error("Unknown Event Type");
     }
     let translate = translatePrev.current - (startX - endX);
     if (translate > 0) {

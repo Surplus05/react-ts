@@ -14,10 +14,7 @@ const StyledVideoWrapper = styled.div<VideoWrapperProps>`
   background-color: var(--color--black);
   flex-grow: 1;
   color: #fff;
-  flex-direction: ${({ isRow }) => {
-    if (isRow) return "row";
-    return "column";
-  }};
+  flex-direction: ${({ isRow }) => (isRow ? "row" : "column")};
 `;
 
 const StyledVideoArea = styled.div`

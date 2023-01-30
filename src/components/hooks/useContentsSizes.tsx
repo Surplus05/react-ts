@@ -32,10 +32,10 @@ export default function useContentsSizes(): [
     imgQuality = "medium";
     itemPerPage = 2;
   }
-  width = (context.innerWidth - 16) / itemPerPage - 8 + 8 / itemPerPage;
-  if (context.innerWidth >= 1440) {
-    width = 1440 / itemPerPage - 8 + 8 / itemPerPage;
-  }
+  width =
+    context.innerWidth >= 1440
+      ? 1440 / itemPerPage - 8 + 8 / itemPerPage
+      : (context.innerWidth - 16) / itemPerPage - 8 + 8 / itemPerPage;
   height = (width * 9) / 16;
 
   return [itemPerPage, fontSize, imgQuality, width, height];
