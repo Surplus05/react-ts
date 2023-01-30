@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { PlatformContext } from "../../context/PlatformContext";
@@ -20,7 +20,7 @@ const Watch = () => {
   const [isRow, setIsRow] = useState<boolean>(false);
   const player = useRef<any>(null);
   const [data, requestData] = useChannelData();
-  const [addHistory, removeHistory] = useWatchHistory();
+  const [addHistory] = useWatchHistory();
   const videoId = searchParams.get("v") as string;
   const channelId = searchParams.get("c") as string;
 
@@ -58,6 +58,7 @@ const Watch = () => {
         },
       });
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [videoId]);
 
   useEffect(() => {

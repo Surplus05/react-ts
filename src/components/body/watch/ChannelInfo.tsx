@@ -1,7 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import { PlatformContext } from "../../context/PlatformContext";
 import { setDigits } from "../../service/Functions";
 import PlaylistButton from "../PlaylistButton";
 
@@ -38,8 +37,7 @@ const StyledChannelSpan = styled.span`
 `;
 
 const ChannelInfo = ({ channelData }: { channelData: string[] }) => {
-  let context = useContext(PlatformContext);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const videoId = searchParams.get("v") as string;
   const channelId = searchParams.get("c") as string;
   const title = document.title;

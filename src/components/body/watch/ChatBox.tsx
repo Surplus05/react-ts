@@ -29,15 +29,21 @@ const ChatBox = ({
   getCurrentTime: () => number;
   isRow: boolean;
 }) => {
+  // hooks
   const [checkChatData, getChatData] = useFirebase();
+
+  // states
   const [update, setUpdate] = useState<boolean>(false);
+
+  // refs
   const chatData = useRef<Array<any>>([]);
-  const previusTime = useRef<number>(0);
+  const previousTime = useRef<number>(0);
   const preventDuplicate = useRef<boolean>(false);
   const interval = useRef<any>();
 
   useEffect(() => {
     checkChatData(videoId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -47,26 +53,22 @@ const ChatBox = ({
       }
       interval.current = setInterval(() => {
         let currentTime = getCurrentTime();
-        if (previusTime.current === currentTime) {
+        if (previousTime.current === currentTime) {
           if (preventDuplicate.current) return;
           preventDuplicate.current = true;
         }
-        if (previusTime.current > currentTime) {
+        if (previousTime.current > currentTime) {
           chatData.current = [];
-          previusTime.current = 0;
+          previousTime.current = 0;
         }
-        getChatData(videoId, previusTime.current, currentTime).then(
+        getChatData(videoId, previousTime.current, currentTime).then(
           (snapshot) => {
             if (snapshot.val() != null) {
               snapshot.forEach((chatData: any) => {
                 pushToState(chatData.val());
-                // chatData.val() 를 push 해주자.
-                // state array 는 maximum length가 100인 array.
-                // Circular Queue? -> 순서 뒤죽박죽
-                // push 할 때 마다 하나씩 제거를 해주어야 함.
               });
             }
-            previusTime.current = currentTime;
+            previousTime.current = currentTime;
           }
         );
       }, 500); // chat 가져올 interval
@@ -76,6 +78,7 @@ const ChatBox = ({
         clearInterval(interval.current);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [update]);
 
   function pushToState(data: Object) {
@@ -88,7 +91,7 @@ const ChatBox = ({
   }
 
   return (
-    <StyledChatBoxWrapper isRow={isRow} className="scroll">
+    <StyledChatBoxWrapper isRow={isRow} className="chatBox scroll">
       {chatData.current.length > 0 &&
         chatData.current.map((chat: any) => {
           return <Chatting key={chat.currentTime} chat={chat}></Chatting>;

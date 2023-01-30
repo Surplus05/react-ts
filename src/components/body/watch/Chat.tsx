@@ -1,8 +1,6 @@
-import { ref, runTransaction } from "firebase/database";
-import React, { BaseSyntheticEvent, useEffect, useRef } from "react";
+import React, { BaseSyntheticEvent, useRef } from "react";
 import styled from "styled-components";
 import useFirebase from "../../hooks/useFirebase";
-import { db } from "../../service/Firebase";
 import ChatBox from "./ChatBox";
 
 interface ChatWrapperProps {

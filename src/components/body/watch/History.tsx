@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { StyledIconWrapper } from "../../../common/style";
 import WatchHistoryItem from "./WatchHistoryItem";
@@ -104,10 +104,11 @@ const History = ({
       <StyledHistoryItemWrapper
         className="scroll"
         style={{
-          maxHeight: isExpand ? "calc(100vh - 106px)" : "calc(100vh - 158px)",
+          maxHeight: isExpand
+            ? "calc(100vh - 6.625em)"
+            : "calc(100vh - 9.875em)",
         }}
       >
-        {!watchHistory && <span>기록이 존재하지 않습니다</span>}
         {watchHistory &&
           watchHistory.map((history: any) => {
             return (

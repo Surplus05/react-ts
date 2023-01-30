@@ -8,6 +8,7 @@ interface VideoWrapperProps {
 }
 
 const StyledVideoWrapper = styled.div<VideoWrapperProps>`
+  width: 100%;
   display: flex;
   justify-content: space-between;
   background-color: var(--color--black);
