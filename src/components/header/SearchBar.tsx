@@ -102,6 +102,8 @@ const SearchBar = ({
       if (context.platform === "DESKTOP") {
         wrapperRef.current.classList.remove("hidden");
         resultRef.current.classList.add("sr-focusOut");
+      } else if (context.platform === "MOBILE") {
+        resultRef.current.classList.remove("sr-focusOut");
       }
     }
   }, [resultRef, wrapperRef, context.platform]);
