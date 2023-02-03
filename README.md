@@ -5,8 +5,9 @@ https://surplus05.github.io/react-ts
   
 같이보기  
 유튜브 목록에서 영상 클릭하거나 마우스 머무르기. 이후 팝업창 우측 같이보기 클릭  
-예시 링크  
-https://surplus05.github.io/react-ts/#/watch?v=YQHsXMglC9A&c=UComP_epzeKzvBX156r6pm1Q
+예시 링크    
+https://surplus05.github.io/react-ts/#/watch?v=YQHsXMglC9A&c=UComP_epzeKzvBX156r6pm1Q  
+API 호출 횟수를 줄이기 위해 링크 타고 들어가면 영상정보는 표시되지 않음.  
     
   
 마치며..  
