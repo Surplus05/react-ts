@@ -20,7 +20,7 @@ https://surplus05.github.io/react-ts
 ![image](https://user-images.githubusercontent.com/104773096/216751091-ff6b8c99-883a-4ad0-b4bc-2e1b02b6f523.png)
 
 같이보기 ( component/body/watch/Watch.tsx ) 의 경우  
-유튜브 목록에서 영상 클릭하거나 마우스 머무르기. 이후 팝업창 우측 같이보기 클릭해서 진입 가능  
+Main Page 에서 영상 클릭하거나 마우스 머물러 Popup 을 띄우고, Main Page - Popup 우측 같이보기 클릭해서 진입 가능  
 https://surplus05.github.io/react-ts/#/watch?v=YQHsXMglC9A&c=UComP_epzeKzvBX156r6pm1Q  
 API 호출 횟수를 줄이기 위해 링크 타고 들어가면 영상정보는 표시되지 않음.  
     
